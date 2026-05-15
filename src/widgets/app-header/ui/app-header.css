@@ -53,8 +53,6 @@
   }
 
   .app-header__nav {
-    margin-left: 0;
-    overflow-x: auto;
-    padding-bottom: 4px;
+    display: none;
   }
 }

@@ -28,13 +28,33 @@
 
 html {
   min-width: 320px;
+  overflow-x: hidden;
+  overflow-y: scroll;
   background: var(--bg);
+  scrollbar-color: var(--accent) var(--surface-muted);
+}
+
+::-webkit-scrollbar {
+  width: 12px;
+  height: 12px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--surface-muted);
+}
+
+::-webkit-scrollbar-thumb {
+  border: 3px solid var(--surface-muted);
+  border-radius: 999px;
+  background: var(--accent);
 }
 
 body {
   margin: 0;
   min-width: 320px;
   min-height: 100vh;
+  overflow-x: hidden;
+  overflow-y: visible;
   color: var(--text);
   background: var(--bg);
 }

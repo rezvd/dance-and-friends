@@ -1,3 +1,5 @@
+import { useState } from 'react'
+
 import {
   calendarMonths,
   directions,
@@ -14,7 +16,19 @@ const mobileScheduleMonths = calendarMonths.map((month) => ({
   events: scheduleEvents.filter((event) => getMonthTitle(event.date) === month.title),
 }))
 
+const defaultMobileMonthTitle =
+  mobileScheduleMonths.find((month) => month.title === getMonthTitleFromDate(new Date()))
+    ?.title ?? mobileScheduleMonths[0]?.title
+
 export function HomePage() {
+  const [activeMonthIndex, setActiveMonthIndex] = useState(0)
+  const [openMobileMonthTitle, setOpenMobileMonthTitle] = useState(
+    defaultMobileMonthTitle,
+  )
+  const activeMonth = calendarMonths[activeMonthIndex]
+  const isFirstMonth = activeMonthIndex === 0
+  const isLastMonth = activeMonthIndex === calendarMonths.length - 1
+
   return (
     <div className="home-page">
       <section className="hero" aria-labelledby="hero-title">
@@ -86,65 +100,109 @@ export function HomePage() {
           <h2 id="schedule-title">Май — июль 2026</h2>
         </div>
 
+        <div className="calendar-controls" aria-label="Переключение месяца">
+          <button
+            className="calendar-button"
+            type="button"
+            onClick={() => setActiveMonthIndex((index) => Math.max(0, index - 1))}
+            disabled={isFirstMonth}
+            aria-label="Предыдущий месяц"
+          >
+            <span className="calendar-button__arrow" aria-hidden="true">
+              ›
+            </span>
+          </button>
+          <span>{activeMonth.title}</span>
+          <button
+            className="calendar-button"
+            type="button"
+            onClick={() =>
+              setActiveMonthIndex((index) => Math.min(calendarMonths.length - 1, index + 1))
+            }
+            disabled={isLastMonth}
+            aria-label="Следующий месяц"
+          >
+            <span className="calendar-button__arrow" aria-hidden="true">
+              ›
+            </span>
+          </button>
+        </div>
+
         <div className="calendar" aria-label="Календарь событий Jazz Time">
-          {calendarMonths.map((month) => (
-            <article className="calendar-month" key={month.title}>
-              <h3>{month.title}</h3>
-              <div className="calendar-month__weekdays" aria-hidden="true">
-                {weekdays.map((day) => (
-                  <span key={day}>{day}</span>
-                ))}
-              </div>
-              <div className="calendar-month__grid">
-                {Array.from({ length: month.offset }, (_, index) => (
-                  <span
-                    className="calendar-day calendar-day--empty"
-                    key={`${month.title}-empty-${index}`}
-                  />
-                ))}
-                {month.days.map((day) => (
-                  <div
-                    className={
-                      day.events.length > 0
-                        ? 'calendar-day calendar-day--event'
-                        : 'calendar-day'
-                    }
-                    key={`${month.title}-${day.day}`}
-                    tabIndex={day.events.length > 0 ? 0 : undefined}
-                  >
-                    <span className="calendar-day__number">{day.day}</span>
-                    {day.events.map((event) => (
-                      <span
-                        className="calendar-day__event"
-                        key={event.title + event.time}
-                      >
-                        <span className="calendar-day__label">
-                          <strong>{event.time}</strong>
-                          <span className="calendar-day__title">{event.title}</span>
-                        </span>
-                        <span className="calendar-day__tooltip" role="tooltip">
-                          {event.href ? (
-                            <a href={event.href} target="_blank" rel="noreferrer">
-                              {event.title}
-                            </a>
-                          ) : (
-                            event.title
-                          )}
-                          <small>{event.description}</small>
-                        </span>
+          <article className="calendar-month" key={activeMonth.title}>
+            <h3>{activeMonth.title}</h3>
+            <div className="calendar-month__weekdays" aria-hidden="true">
+              {weekdays.map((day) => (
+                <span key={day}>{day}</span>
+              ))}
+            </div>
+            <div className="calendar-month__grid">
+              {Array.from({ length: activeMonth.offset }, (_, index) => (
+                <span
+                  className="calendar-day calendar-day--empty"
+                  key={`${activeMonth.title}-empty-${index}`}
+                />
+              ))}
+              {activeMonth.days.map((day) => (
+                <div
+                  className={
+                    day.events.length > 0
+                      ? 'calendar-day calendar-day--event'
+                      : 'calendar-day'
+                  }
+                  key={`${activeMonth.title}-${day.day}`}
+                  tabIndex={day.events.length > 0 ? 0 : undefined}
+                >
+                  <span className="calendar-day__number">{day.day}</span>
+                  {day.events.map((event) => (
+                    <span className="calendar-day__event" key={event.title + event.time}>
+                      <span className="calendar-day__label">
+                        <strong>{event.time}</strong>
+                        <span className="calendar-day__title">{event.title}</span>
                       </span>
-                    ))}
-                  </div>
-                ))}
-              </div>
-            </article>
-          ))}
+                      <span className="calendar-day__tooltip" role="tooltip">
+                        {event.href ? (
+                          <a href={event.href} target="_blank" rel="noreferrer">
+                            {event.title}
+                          </a>
+                        ) : (
+                          event.title
+                        )}
+                        <small>{event.description}</small>
+                      </span>
+                    </span>
+                  ))}
+                </div>
+              ))}
+            </div>
+          </article>
         </div>
 
         <div className="mobile-schedule" aria-label="Список событий Jazz Time">
           {mobileScheduleMonths.map((month) => (
-            <article className="mobile-schedule__month" key={month.title}>
-              <h3>{month.title}</h3>
+            <article
+              className={
+                month.title === openMobileMonthTitle
+                  ? 'mobile-schedule__month mobile-schedule__month--open'
+                  : 'mobile-schedule__month'
+              }
+              key={month.title}
+            >
+              <button
+                className="mobile-schedule__summary"
+                type="button"
+                aria-expanded={month.title === openMobileMonthTitle}
+                onClick={() =>
+                  setOpenMobileMonthTitle((currentTitle) =>
+                    currentTitle === month.title ? '' : month.title,
+                  )
+                }
+              >
+                <span>{month.title}</span>
+                <span className="mobile-schedule__arrow" aria-hidden="true">
+                  ›
+                </span>
+              </button>
               <div className="mobile-schedule__events">
                 {month.events.map((event) => (
                   <article className="mobile-schedule__event" key={`${event.date}-${event.title}`}>
@@ -193,7 +251,7 @@ export function HomePage() {
               <small>Новости, анонсы и обсуждения</small>
             </span>
           </a>
-          <div className="contact-card">
+          <div className="contact-card contact-card--person">
             <span>
               <strong>Софья Билль</strong>
               <a href="tel:+79136143226">+7 913 614-32-26</a>
@@ -215,7 +273,10 @@ function getDate(date: string) {
 }
 
 function getMonthTitle(date: string) {
-  const parsedDate = getDate(date)
+  return getMonthTitleFromDate(getDate(date))
+}
+
+function getMonthTitleFromDate(parsedDate: Date) {
   const month = new Intl.DateTimeFormat('ru-RU', { month: 'long' }).format(parsedDate)
   return `${capitalize(month)} ${parsedDate.getFullYear()}`
 }
