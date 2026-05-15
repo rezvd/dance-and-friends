@@ -1,0 +1,42 @@
+.app-header {
+  border-bottom: 1px solid var(--border);
+  background: color-mix(in srgb, var(--surface) 88%, transparent);
+}
+
+.app-header__inner {
+  width: min(1120px, 100%);
+  min-height: 64px;
+  margin: 0 auto;
+  padding: 0 24px;
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
+
+.app-header__brand {
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.app-header__nav {
+  display: flex;
+  gap: 16px;
+  margin-left: auto;
+  color: var(--text-muted);
+  font-size: 14px;
+}
+
+.app-header__nav a {
+  text-decoration: none;
+}
+
+@media (max-width: 560px) {
+  .app-header__inner {
+    padding: 0 16px;
+    gap: 12px;
+  }
+
+  .app-header__nav {
+    display: none;
+  }
+}

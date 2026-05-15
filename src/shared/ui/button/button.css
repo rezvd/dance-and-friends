@@ -1,0 +1,31 @@
+.button {
+  min-height: 36px;
+  border: 1px solid transparent;
+  border-radius: 6px;
+  padding: 0 14px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-weight: 600;
+  transition:
+    background 160ms ease,
+    border-color 160ms ease,
+    color 160ms ease;
+}
+
+.button--primary {
+  color: var(--accent-contrast);
+  background: var(--accent);
+}
+
+.button--secondary {
+  color: var(--text);
+  background: var(--surface-muted);
+  border-color: var(--border);
+}
+
+.button:focus-visible {
+  outline: 3px solid color-mix(in srgb, var(--accent) 30%, transparent);
+  outline-offset: 2px;
+}
