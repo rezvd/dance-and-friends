@@ -1,98 +1,404 @@
 .home-page {
   display: grid;
-  gap: 32px;
+  gap: 72px;
+  padding-bottom: 72px;
 }
 
-.home-page__hero {
-  padding: 56px;
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  background: var(--surface);
+.hero {
+  min-height: calc(100svh - 64px);
+  display: flex;
+  align-items: center;
+  width: min(1180px, 100%);
+  margin: 0 auto;
+  padding: 48px 24px;
 }
 
-.home-page__eyebrow {
+.hero__content {
+  max-width: 860px;
+}
+
+.hero__eyebrow,
+.section__eyebrow {
   margin: 0 0 12px;
   color: var(--accent);
-  font-weight: 700;
-  text-transform: uppercase;
   font-size: 13px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
 }
 
-.home-page h1 {
-  max-width: 760px;
+.hero h1 {
   margin: 0;
-  font-size: 48px;
-  line-height: 1.08;
+  color: var(--text);
+  font-family: var(--logo-font);
+  font-size: clamp(56px, 9vw, 112px);
+  font-weight: 700;
+  letter-spacing: 0;
+  line-height: 0.92;
 }
 
-.home-page__lead {
-  max-width: 640px;
-  margin: 20px 0 0;
+.hero__lead {
+  max-width: 600px;
+  margin: 28px 0 0;
+  color: var(--text-muted);
+  font-size: 22px;
+  line-height: 1.45;
+}
+
+.hero__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 32px;
+}
+
+.section {
+  width: min(1180px, 100%);
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+.section__header {
+  max-width: 760px;
+  margin-bottom: 28px;
+}
+
+.section h2,
+.contacts h2 {
+  margin: 0;
+  color: var(--text);
+  font-size: clamp(32px, 5vw, 56px);
+  line-height: 1.05;
+}
+
+.section__header p:not(.section__eyebrow) {
+  margin: 18px 0 0;
   color: var(--text-muted);
   font-size: 18px;
 }
 
-.home-page__actions {
-  display: flex;
-  gap: 12px;
-  flex-wrap: wrap;
-  margin-top: 28px;
-}
-
-.home-page__grid {
+.directions {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 16px;
 }
 
-.home-page__panel {
+.direction-card,
+.calendar-month,
+.contacts {
   border: 1px solid var(--border);
   border-radius: var(--radius);
   background: var(--surface);
+}
+
+.direction-card {
   padding: 24px;
 }
 
-.home-page__panel h2 {
-  margin: 0 0 16px;
-  font-size: 20px;
-}
-
-.home-page__panel ul {
-  display: grid;
-  gap: 10px;
+.direction-card h3,
+.calendar-month h3 {
   margin: 0;
-  padding: 0;
-  list-style: none;
-  color: var(--text-muted);
-}
-
-.home-page__panel li {
-  min-height: 32px;
-  display: flex;
-  align-items: center;
-  border-bottom: 1px solid var(--border);
-}
-
-.home-page__panel li:last-child {
-  border-bottom: 0;
-}
-
-.home-page__panel code {
-  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
-  font-size: 14px;
   color: var(--text);
 }
 
-@media (max-width: 760px) {
-  .home-page__hero {
-    padding: 32px 24px;
+.direction-card p,
+.about p,
+.contacts p {
+  margin: 14px 0 0;
+  color: var(--text-muted);
+}
+
+.about {
+  padding-top: 56px;
+  padding-bottom: 56px;
+  background: var(--accent-contrast);
+  color: var(--dark-contrast);
+  width: 100%;
+  max-width: none;
+}
+
+.about .section__header,
+.about__grid {
+  width: min(1180px, 100%);
+  margin-right: auto;
+  margin-left: auto;
+  padding-right: 24px;
+  padding-left: 24px;
+}
+
+.about .section__eyebrow,
+.about h2,
+.about p {
+  color: var(--dark-contrast);
+}
+
+.about__grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 20px;
+}
+
+.about__grid p {
+  margin: 0;
+  padding: 24px;
+  border: 1px solid color-mix(in srgb, var(--dark-contrast) 24%, transparent);
+  border-radius: var(--radius);
+}
+
+.calendar {
+  display: flex;
+  gap: 18px;
+  overflow-x: auto;
+  overscroll-behavior-inline: contain;
+  scroll-snap-type: x mandatory;
+  padding: 0 0 12px;
+  scrollbar-color: var(--accent) var(--surface-muted);
+}
+
+.calendar-month {
+  flex: 0 0 min(860px, max(720px, calc(100vw - 48px)));
+  padding: 20px;
+  scroll-snap-align: start;
+}
+
+.calendar-month h3 {
+  margin-bottom: 16px;
+  font-size: 24px;
+}
+
+.calendar-month__weekdays,
+.calendar-month__grid {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: 6px;
+}
+
+.calendar-month__weekdays {
+  margin-bottom: 6px;
+  color: var(--text-muted);
+  font-size: 12px;
+  font-weight: 700;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+.calendar-day {
+  min-height: 88px;
+  padding: 8px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: var(--bg);
+  position: relative;
+}
+
+.calendar-day--empty {
+  visibility: hidden;
+}
+
+.calendar-day--event {
+  background: var(--surface-muted);
+  border-color: color-mix(in srgb, var(--accent) 32%, var(--border));
+  outline: none;
+}
+
+.calendar-day--event:focus-visible {
+  outline: 3px solid color-mix(in srgb, var(--accent) 32%, transparent);
+  outline-offset: 2px;
+}
+
+.calendar-day__number {
+  display: block;
+  margin-bottom: 6px;
+  color: var(--text);
+  font-weight: 800;
+}
+
+.calendar-day__event {
+  display: block;
+  color: var(--text-muted);
+  font-size: 12px;
+  line-height: 1.25;
+}
+
+.calendar-day__event strong {
+  color: var(--text);
+  font-weight: 900;
+}
+
+.calendar-day__tooltip {
+  position: absolute;
+  left: 8px;
+  bottom: calc(100% + 8px);
+  z-index: 5;
+  width: min(260px, 72vw);
+  padding: 12px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  color: var(--text);
+  background: var(--surface);
+  box-shadow: 0 16px 40px color-mix(in srgb, #000000 42%, transparent);
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(6px);
+  transition:
+    opacity 140ms ease,
+    transform 140ms ease;
+}
+
+.calendar-day__tooltip a {
+  color: var(--text);
+  font-weight: 900;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 4px;
+}
+
+.calendar-day__tooltip small {
+  display: block;
+  margin-top: 6px;
+  color: var(--text-muted);
+  font-size: 12px;
+  line-height: 1.35;
+}
+
+.calendar-day--event:hover .calendar-day__tooltip,
+.calendar-day--event:focus .calendar-day__tooltip,
+.calendar-day--event:focus-within .calendar-day__tooltip {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateY(0);
+}
+
+.contacts {
+  width: min(1180px, calc(100% - 48px));
+  margin: 0 auto;
+  padding: 32px;
+  display: grid;
+  grid-template-columns: minmax(240px, 0.55fr) minmax(360px, 1fr);
+  gap: 24px;
+  align-items: center;
+  background: var(--surface);
+  color: var(--text);
+}
+
+.contacts .section__eyebrow,
+.contacts h2,
+.contacts p {
+  color: var(--text);
+}
+
+.contacts h2 {
+  font-size: clamp(28px, 4vw, 44px);
+}
+
+.contacts__intro p:not(.section__eyebrow) {
+  color: var(--text-muted);
+  margin-top: 0;
+}
+
+.contacts__cards {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.contact-card {
+  min-height: 132px;
+  padding: 18px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  display: flex;
+  gap: 14px;
+  align-items: flex-start;
+  color: var(--text);
+  background: var(--surface-muted);
+  text-decoration: none;
+}
+
+.contact-card span:last-child {
+  display: grid;
+  gap: 8px;
+}
+
+.contact-card strong {
+  font-size: 18px;
+}
+
+.contact-card small,
+.contact-card a {
+  color: var(--text-muted);
+}
+
+.contact-card a {
+  text-decoration-thickness: 1px;
+  text-underline-offset: 4px;
+}
+
+.contact-card__icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 8px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+  color: #ffffff;
+  background: #0077ff;
+  font-weight: 900;
+  letter-spacing: 0;
+}
+
+@media (max-width: 920px) {
+  .hero {
+    min-height: auto;
   }
 
-  .home-page h1 {
-    font-size: 34px;
-  }
-
-  .home-page__grid {
+  .directions,
+  .about__grid,
+  .contacts {
     grid-template-columns: 1fr;
+  }
+
+  .contacts__cards {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 680px) {
+  .home-page {
+    gap: 52px;
+  }
+
+  .hero,
+  .section {
+    padding-right: 16px;
+    padding-left: 16px;
+  }
+
+  .hero__lead {
+    font-size: 18px;
+  }
+
+  .calendar {
+    margin-right: -16px;
+    padding-right: 16px;
+  }
+
+  .calendar-month {
+    flex-basis: 720px;
+    padding: 16px;
+  }
+
+  .calendar-day {
+    min-height: 76px;
+    padding: 7px;
+  }
+
+  .calendar-day__event {
+    font-size: 11px;
+  }
+
+  .contacts {
+    width: calc(100% - 32px);
+    padding: 24px;
   }
 }

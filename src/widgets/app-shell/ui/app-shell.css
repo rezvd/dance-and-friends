@@ -5,14 +5,8 @@
 }
 
 .app-shell__main {
-  width: min(1120px, 100%);
+  width: 100%;
   margin: 0 auto;
-  padding: 40px 24px 64px;
+  padding: 0;
   flex: 1;
-}
-
-@media (max-width: 720px) {
-  .app-shell__main {
-    padding: 24px 16px 48px;
-  }
 }

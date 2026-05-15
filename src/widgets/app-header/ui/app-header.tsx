@@ -1,5 +1,3 @@
-import { ThemeToggle } from '@/features/theme-toggle'
-
 import './app-header.css'
 
 export function AppHeader() {
@@ -10,10 +8,11 @@ export function AppHeader() {
           Jazz Time
         </a>
         <nav className="app-header__nav" aria-label="Main navigation">
-          <a href="#stack">Stack</a>
-          <a href="#structure">Structure</a>
+          <a href="#directions">Направления</a>
+          <a href="#about">О школе</a>
+          <a href="#schedule">Расписание</a>
+          <a href="#contacts">Контакты</a>
         </nav>
-        <ThemeToggle />
       </div>
     </header>
   )

@@ -1,8 +1,8 @@
 .button {
-  min-height: 36px;
+  min-height: 44px;
   border: 1px solid transparent;
   border-radius: 6px;
-  padding: 0 14px;
+  padding: 0 18px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -15,13 +15,13 @@
 }
 
 .button--primary {
-  color: var(--accent-contrast);
+  color: var(--dark-contrast);
   background: var(--accent);
 }
 
 .button--secondary {
   color: var(--text);
-  background: var(--surface-muted);
+  background: color-mix(in srgb, var(--surface) 82%, transparent);
   border-color: var(--border);
 }
 
