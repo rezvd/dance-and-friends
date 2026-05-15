@@ -1,12 +1,18 @@
 import {
   calendarMonths,
   directions,
+  scheduleEvents,
 } from '@/entities/project/model/school-info'
 import { Button } from '@/shared/ui/button'
 
 import './home-page.css'
 
 const weekdays = ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс']
+
+const mobileScheduleMonths = calendarMonths.map((month) => ({
+  title: month.title,
+  events: scheduleEvents.filter((event) => getMonthTitle(event.date) === month.title),
+}))
 
 export function HomePage() {
   return (
@@ -112,8 +118,9 @@ export function HomePage() {
                         className="calendar-day__event"
                         key={event.title + event.time}
                       >
-                        <span>
-                          <strong>{event.time}</strong> {event.title}
+                        <span className="calendar-day__label">
+                          <strong>{event.time}</strong>
+                          <span className="calendar-day__title">{event.title}</span>
                         </span>
                         <span className="calendar-day__tooltip" role="tooltip">
                           {event.href ? (
@@ -128,6 +135,37 @@ export function HomePage() {
                       </span>
                     ))}
                   </div>
+                ))}
+              </div>
+            </article>
+          ))}
+        </div>
+
+        <div className="mobile-schedule" aria-label="Список событий Jazz Time">
+          {mobileScheduleMonths.map((month) => (
+            <article className="mobile-schedule__month" key={month.title}>
+              <h3>{month.title}</h3>
+              <div className="mobile-schedule__events">
+                {month.events.map((event) => (
+                  <article className="mobile-schedule__event" key={`${event.date}-${event.title}`}>
+                    <time dateTime={event.date}>
+                      <strong>{getDayNumber(event.date)}</strong>
+                      <span>{getWeekday(event.date)}</span>
+                    </time>
+                    <div>
+                      <p>
+                        <strong>{event.time}</strong>{' '}
+                        {event.href ? (
+                          <a href={event.href} target="_blank" rel="noreferrer">
+                            {event.title}
+                          </a>
+                        ) : (
+                          event.title
+                        )}
+                      </p>
+                      <small>{event.description}</small>
+                    </div>
+                  </article>
                 ))}
               </div>
             </article>
@@ -170,4 +208,28 @@ export function HomePage() {
 
 function scrollToSection(id: string) {
   document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' })
+}
+
+function getDate(date: string) {
+  return new Date(`${date}T12:00:00+06:00`)
+}
+
+function getMonthTitle(date: string) {
+  const parsedDate = getDate(date)
+  const month = new Intl.DateTimeFormat('ru-RU', { month: 'long' }).format(parsedDate)
+  return `${capitalize(month)} ${parsedDate.getFullYear()}`
+}
+
+function getDayNumber(date: string) {
+  return getDate(date).getDate()
+}
+
+function getWeekday(date: string) {
+  return new Intl.DateTimeFormat('ru-RU', { weekday: 'short' })
+    .format(getDate(date))
+    .replace('.', '')
+}
+
+function capitalize(value: string) {
+  return value.charAt(0).toUpperCase() + value.slice(1)
 }
