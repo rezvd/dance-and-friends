@@ -44,15 +44,7 @@
 }
 
 @media (max-width: 760px) {
-  .app-header__inner {
-    min-height: auto;
-    padding: 0 16px;
-    display: grid;
-    gap: 8px;
-    padding-block: 12px;
-  }
-
-  .app-header__nav {
+  .app-header {
     display: none;
   }
 }
