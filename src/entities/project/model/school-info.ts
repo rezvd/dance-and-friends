@@ -8,7 +8,6 @@ export type ScheduleEvent = {
   time: string
   title: string
   description: string
-  href?: string
 }
 
 export type CalendarDay = {
@@ -17,166 +16,119 @@ export type CalendarDay = {
 }
 
 export type CalendarMonth = {
+  key: string
   title: string
   offset: number
   days: CalendarDay[]
+  events: ScheduleEvent[]
 }
 
 export const directions: DanceDirection[] = [
   {
     title: 'Линди хоп',
     description:
-      'Парный свинговый танец с живой, пружинящей базой, музыкальностью и большим пространством для импровизации. На занятиях разбираем ведение и следование, базовые ритмы, повороты, свинг-ауты и умение танцевать под разную скорость джаза.',
+      'Парный свинговый танец с **живой пружинящей базой**, музыкальностью и пространством для импровизации. На занятиях разбираем **ведение и следование**, базовые ритмы и уверенное социальное взаимодействие.',
   },
   {
-    title: 'Блюз парный и соло',
+    title: 'Блюз',
     description:
-      'Блюз учит слышать медленную музыку телом: вес, паузы, дыхание, контакт и точную работу с ритмом. В парном блюзе важны бережное взаимодействие и диалог, а в соло — пластика, грув, изоляции и личная выразительность.',
+      'Блюз помогает услышать музыку телом: **вес паузы дыхание и контакт**. Работаем с пластикой, грувом, музыкальностью и **бережным диалогом в паре**.',
   },
   {
     title: 'Бальбоа',
     description:
-      'Компактный и элегантный парный танец для быстрой свинговой музыки. Он строится на близкой рамке, аккуратной работе ног, поворотах и ощущении потока, поэтому отлично подходит тем, кто любит техничность и скорость без лишней суеты.',
+      'Компактный и элегантный танец для **быстрой свинговой музыки**. Подходит тем, кто любит **точность и скорость**, чистую работу ног и ощущение потока.',
   },
   {
     title: 'Соло джаз',
     description:
-      'Соло джаз развивает координацию, ритм, свободу движения и танцевальный словарь эпохи свинга. Учим шаги, связки, вариации, работу с акцентами и постепенно собираем всё это в уверенную импровизацию.',
+      'Развиваем **координацию ритм и свободу движения**. Учим шаги эпохи свинга, собираем их в связки и постепенно выходим к **уверенной импровизации**.',
   },
   {
-    title: 'Самоподготовка',
+    title: 'Практики и встречи',
     description:
-      'Сампо — время для самостоятельной практики, повторения материала, обмена идеями и танцев с разными партнёрами. Иногда встречи проходят с модерацией: задаём тему, разбираем вопросы и помогаем друг другу расти.',
+      'Помимо занятий собираемся на **самостоятельные практики вечеринки и опен-эйры** и специальные события. Это пространство, где можно **танцевать больше** и находить своих людей.',
   },
 ]
 
-const selfPracticeDates = [
-  '2026-05-15',
-  '2026-05-19',
-  '2026-05-22',
-  '2026-05-26',
-  '2026-05-29',
-  '2026-06-02',
-  '2026-06-05',
-  '2026-06-09',
-  '2026-06-12',
-  '2026-06-16',
-  '2026-06-19',
-  '2026-06-23',
-  '2026-06-26',
-  '2026-06-30',
-  '2026-07-03',
-  '2026-07-07',
-  '2026-07-10',
-  '2026-07-14',
-  '2026-07-17',
-  '2026-07-21',
-  '2026-07-24',
-  '2026-07-28',
-  '2026-07-31',
-]
+const monthFormatter = new Intl.DateTimeFormat('ru-RU', {
+  month: 'long',
+  year: 'numeric',
+})
 
-const selfPracticeEvents: ScheduleEvent[] = selfPracticeDates.map((date) => ({
-  date,
-  time: '19:00',
-  title: 'Сампо',
-  description: 'Самостоятельная практика для всех, кто хочет танцевать больше.',
-}))
+const weekdayFormatter = new Intl.DateTimeFormat('ru-RU', { weekday: 'short' })
 
-export const scheduleEvents: ScheduleEvent[] = [
-  ...selfPracticeEvents,
-  {
-    date: '2026-05-16',
-    time: '17:00–19:00',
-    title: 'Опен-эйр на Зеленом острове',
-    description: 'Танцуем на свежем воздухе и зовём друзей.',
-    href: 'https://2gis.ru/omsk/geo/70030077061620277',
-  },
-  {
-    date: '2026-05-23',
-    time: '19:00',
-    title: 'Модерируемое сампо',
-    description: 'Тема будет объявлена в группе.',
-  },
-  {
-    date: '2026-05-30',
-    time: '09:00–21:00',
-    title: 'Выезд на остров',
-    description: 'Большой день вместе: танцы, общение и летнее настроение.',
-  },
-  {
-    date: '2026-06-13',
-    time: '19:00',
-    title: 'Вечеринка или опен-эйр',
-    description: 'Формат выберем по погоде.',
-  },
-  {
-    date: '2026-06-20',
-    time: '19:00',
-    title: 'Модерируемое сампо',
-    description: 'Тема будет объявлена в группе.',
-  },
-  {
-    date: '2026-06-27',
-    time: '19:00',
-    title: 'Вечеринка или опен-эйр',
-    description: 'Формат выберем по погоде.',
-  },
-  {
-    date: '2026-07-04',
-    time: '19:00',
-    title: 'Модерируемое сампо',
-    description: 'Тема будет объявлена в группе.',
-  },
-  {
-    date: '2026-07-11',
-    time: '19:00',
-    title: 'Вечеринка или опен-эйр',
-    description: 'Формат выберем по погоде.',
-  },
-  {
-    date: '2026-07-18',
-    time: '19:00',
-    title: 'Модерируемое сампо',
-    description: 'Тема будет объявлена в группе.',
-  },
-  {
-    date: '2026-07-25',
-    time: '19:00',
-    title: 'Вечеринка или опен-эйр',
-    description: 'Формат выберем по погоде.',
-  },
-].sort((first, second) => first.date.localeCompare(second.date))
+export function getMonthTitleFromDate(date: Date) {
+  const formatted = monthFormatter.format(date)
+  return formatted.charAt(0).toUpperCase() + formatted.slice(1)
+}
 
-const getEventsByDay = (month: number, day: number) =>
-  scheduleEvents.filter((event) => {
-    const [, eventMonth, eventDay] = event.date.split('-').map(Number)
-    return eventMonth === month && eventDay === day
-  })
+export function getWeekday(dateString: string) {
+  return weekdayFormatter.format(parseIsoDate(dateString))
+}
 
-const makeDays = (month: number, totalDays: number): CalendarDay[] =>
-  Array.from({ length: totalDays }, (_, index) => {
-    const day = index + 1
+export function getDayNumber(dateString: string) {
+  return parseIsoDate(dateString).getDate()
+}
+
+export function parseSheetDate(value: string) {
+  const [day, month, year] = value.split('-').map(Number)
+  return new Date(year, month - 1, day)
+}
+
+export function parseIsoDate(value: string) {
+  const [year, month, day] = value.split('-').map(Number)
+  return new Date(year, month - 1, day)
+}
+
+export function toIsoDate(value: string) {
+  const date = parseSheetDate(value)
+  const year = date.getFullYear()
+  const month = String(date.getMonth() + 1).padStart(2, '0')
+  const day = String(date.getDate()).padStart(2, '0')
+  return `${year}-${month}-${day}`
+}
+
+export function buildTimeLabel(start: string, end?: string) {
+  return end ? `${start}-${end}` : start
+}
+
+export function buildCalendarMonths(events: ScheduleEvent[], today = new Date()): CalendarMonth[] {
+  const currentMonthStart = new Date(today.getFullYear(), today.getMonth(), 1)
+
+  const upcomingEvents = events.filter((event) => parseIsoDate(event.date) >= currentMonthStart)
+  const grouped = new Map<string, ScheduleEvent[]>()
+
+  for (const event of upcomingEvents) {
+    const date = parseIsoDate(event.date)
+    const key = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}`
+    const group = grouped.get(key)
+    if (group) {
+      group.push(event)
+    } else {
+      grouped.set(key, [event])
+    }
+  }
+
+  return Array.from(grouped.entries()).map(([key, monthEvents]) => {
+    const sampleDate = parseIsoDate(monthEvents[0].date)
+    const year = sampleDate.getFullYear()
+    const month = sampleDate.getMonth()
+    const totalDays = new Date(year, month + 1, 0).getDate()
+    const offset = (new Date(year, month, 1).getDay() + 6) % 7
+
     return {
-      day,
-      events: getEventsByDay(month, day),
+      key,
+      title: getMonthTitleFromDate(sampleDate),
+      offset,
+      days: Array.from({ length: totalDays }, (_, index) => {
+        const day = index + 1
+        return {
+          day,
+          events: monthEvents.filter((event) => parseIsoDate(event.date).getDate() === day),
+        }
+      }),
+      events: monthEvents,
     }
   })
-
-export const calendarMonths: CalendarMonth[] = [
-  {
-    title: 'Май 2026',
-    offset: 4,
-    days: makeDays(5, 31),
-  },
-  {
-    title: 'Июнь 2026',
-    offset: 0,
-    days: makeDays(6, 30),
-  },
-  {
-    title: 'Июль 2026',
-    offset: 2,
-    days: makeDays(7, 31),
-  },
-]
+}

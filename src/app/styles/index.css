@@ -1,25 +1,30 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap');
+
 :root {
-  color-scheme: dark;
+  color-scheme: light;
   font-family:
-    Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI',
-    sans-serif;
+    'Montserrat', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
+    'Segoe UI', sans-serif;
   font-synthesis: none;
   line-height: 1.5;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 
-  --bg: #2e0c00;
-  --surface: #3b231b;
-  --surface-muted: #4a2f25;
-  --text: #ecdcd4;
-  --text-muted: #cbbab2;
-  --border: #5d504b;
-  --accent: #ecdcd4;
-  --accent-contrast: #ecdcd4;
-  --dark-contrast: #2e0c00;
-  --logo-font: Georgia, 'Times New Roman', Times, serif;
-  --radius: 8px;
+  --bg: #f7f7f4;
+  --surface: #ffffff;
+  --surface-strong: #fffdf8;
+  --text: #1e1e1e;
+  --text-muted: #5c5c57;
+  --border: #e4e1d9;
+  --border-strong: #1e1e1e;
+  --accent: #4c9faa;
+  --accent-soft: #4c9faa;
+  --accent-strong: #ff6f6f;
+  --accent-warm: #ffb46f;
+  --ink: #1e1e1e;
+  --shadow: 0 12px 36px rgba(30, 30, 30, 0.08);
+  --radius: 22px;
 }
 
 * {
@@ -31,7 +36,7 @@ html {
   overflow-x: hidden;
   overflow-y: scroll;
   background: var(--bg);
-  scrollbar-color: var(--accent) var(--surface-muted);
+  scrollbar-color: var(--accent) #ece9e1;
 }
 
 ::-webkit-scrollbar {
@@ -40,12 +45,11 @@ html {
 }
 
 ::-webkit-scrollbar-track {
-  background: var(--surface-muted);
+  background: #ece9e1;
 }
 
 ::-webkit-scrollbar-thumb {
-  border: 3px solid var(--surface-muted);
-  border-radius: 999px;
+  border: 3px solid #ece9e1;
   background: var(--accent);
 }
 

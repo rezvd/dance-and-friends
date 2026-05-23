@@ -2,14 +2,14 @@
   position: sticky;
   top: 0;
   z-index: 10;
-  border-bottom: 1px solid var(--border);
-  background: color-mix(in srgb, var(--surface) 92%, transparent);
-  backdrop-filter: blur(14px);
+  border-bottom: 1px solid rgba(30, 30, 30, 0.08);
+  background: rgba(255, 255, 255, 0.92);
+  backdrop-filter: blur(12px);
 }
 
 .app-header__inner {
   width: min(1180px, 100%);
-  min-height: 64px;
+  min-height: 72px;
   margin: 0 auto;
   padding: 0 24px;
   display: flex;
@@ -18,21 +18,27 @@
 }
 
 .app-header__brand {
-  color: var(--accent);
-  font-family: var(--logo-font);
-  font-weight: 700;
-  font-size: 24px;
-  letter-spacing: 0;
+  display: inline-flex;
+  align-items: baseline;
+  gap: 8px;
+  color: var(--text);
+  font-weight: 800;
+  font-size: 28px;
+  letter-spacing: -0.05em;
   text-decoration: none;
+}
+
+.app-header__ampersand {
+  color: var(--accent-strong);
 }
 
 .app-header__nav {
   display: flex;
-  gap: 16px;
+  gap: 18px;
   margin-left: auto;
   color: var(--text);
   font-size: 14px;
-  font-weight: 600;
+  font-weight: 700;
 }
 
 .app-header__nav a {
@@ -40,7 +46,7 @@
 }
 
 .app-header__nav a:hover {
-  color: var(--text-muted);
+  color: var(--accent-strong);
 }
 
 @media (max-width: 760px) {

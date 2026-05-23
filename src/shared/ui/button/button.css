@@ -1,28 +1,33 @@
 .button {
-  min-height: 44px;
-  border: 1px solid transparent;
-  border-radius: 6px;
-  padding: 0 18px;
+  min-height: 48px;
+  border: 2px solid transparent;
+  border-radius: 999px;
+  padding: 0 22px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  font-weight: 600;
+  font-weight: 700;
   transition:
     background 160ms ease,
     border-color 160ms ease,
-    color 160ms ease;
+    color 160ms ease,
+    transform 160ms ease;
 }
 
 .button--primary {
-  color: var(--dark-contrast);
-  background: var(--accent);
+  color: #ffffff;
+  background: var(--accent-strong);
 }
 
 .button--secondary {
-  color: var(--text);
-  background: color-mix(in srgb, var(--surface) 82%, transparent);
-  border-color: var(--border);
+  color: var(--accent);
+  background: #ffffff;
+  border-color: rgba(255, 255, 255, 0.7);
+}
+
+.button:hover {
+  transform: translateY(-1px);
 }
 
 .button:focus-visible {

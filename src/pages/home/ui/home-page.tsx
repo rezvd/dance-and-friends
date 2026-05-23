@@ -1,69 +1,119 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 import {
-  calendarMonths,
+  buildCalendarMonths,
   directions,
-  scheduleEvents,
+  getDayNumber,
+  getMonthTitleFromDate,
+  getWeekday,
+  type CalendarMonth,
 } from '@/entities/project/model/school-info'
+import { fetchScheduleEvents } from '@/entities/project/model/sheets'
 import { Button } from '@/shared/ui/button'
 
 import './home-page.css'
 
 const weekdays = ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс']
-
-const mobileScheduleMonths = calendarMonths.map((month) => ({
-  title: month.title,
-  events: scheduleEvents.filter((event) => getMonthTitle(event.date) === month.title),
-}))
-
-const defaultMobileMonthTitle =
-  mobileScheduleMonths.find((month) => month.title === getMonthTitleFromDate(new Date()))
-    ?.title ?? mobileScheduleMonths[0]?.title
+const vkGroupUrl =
+  import.meta.env.VITE_VK_GROUP_URL ?? 'https://vk.com/club238903782'
 
 export function HomePage() {
+  const [months, setMonths] = useState<CalendarMonth[]>([])
   const [activeMonthIndex, setActiveMonthIndex] = useState(0)
-  const [openMobileMonthTitle, setOpenMobileMonthTitle] = useState(
-    defaultMobileMonthTitle,
-  )
-  const activeMonth = calendarMonths[activeMonthIndex]
+  const [openMobileMonthTitle, setOpenMobileMonthTitle] = useState('')
+  const [status, setStatus] = useState<'loading' | 'ready' | 'error'>('loading')
+  const [errorMessage, setErrorMessage] = useState('')
+
+  useEffect(() => {
+    let cancelled = false
+
+    fetchScheduleEvents()
+      .then((events) => {
+        if (cancelled) {
+          return
+        }
+
+        const nextMonths = buildCalendarMonths(events)
+        setMonths(nextMonths)
+        setActiveMonthIndex(0)
+        setOpenMobileMonthTitle(
+          nextMonths.find((month) => month.title === getMonthTitleFromDate(new Date()))?.title ??
+            nextMonths[0]?.title ??
+            '',
+        )
+        setStatus('ready')
+        setErrorMessage('')
+      })
+      .catch((error: unknown) => {
+        if (cancelled) {
+          return
+        }
+
+        setStatus('error')
+        setErrorMessage(
+          error instanceof Error
+            ? error.message
+            : 'Не удалось загрузить расписание. Попробуйте позже.',
+        )
+      })
+
+    return () => {
+      cancelled = true
+    }
+  }, [])
+
+  const activeMonth = months[activeMonthIndex]
   const isFirstMonth = activeMonthIndex === 0
-  const isLastMonth = activeMonthIndex === calendarMonths.length - 1
+  const isLastMonth = activeMonthIndex === months.length - 1
 
   return (
     <div className="home-page">
       <section className="hero" aria-labelledby="hero-title">
         <div className="hero__content">
-          <p className="hero__eyebrow">Школа социальных танцев в Омске</p>
-          <h1 id="hero-title">Jazz Time</h1>
+          <p className="hero__eyebrow">Сообщество социальных танцев в Омске</p>
+          <h1 id="hero-title" className="hero__logo" aria-label="Dance and Friends">
+            <span>DANCE</span>
+            <span className="hero__logo-ampersand">&amp;</span>
+            <span>FRIENDS</span>
+          </h1>
           <p className="hero__lead">
-            Линди хоп, блюз, бальбоа и соло джаз для тех, кто хочет танцевать
-            под свинг, находить своих людей и чаще встречаться на паркете.
+            Линди хоп, блюз, бальбоа и соло джаз для тех, кто хочет чаще
+            танцевать, знакомиться и проводить время в сильном тёплом комьюнити.
           </p>
           <div className="hero__actions">
             <Button type="button" onClick={() => scrollToSection('contacts')}>
-              Записаться на занятие
+              Написать нам
             </Button>
             <Button
               type="button"
               variant="secondary"
               onClick={() => scrollToSection('schedule')}
             >
-              Смотреть расписание
+              Смотреть мероприятия
             </Button>
           </div>
+        </div>
+        <div className="hero__aside" aria-hidden="true">
+          <div className="hero__poster hero__poster--teal">Танцуй. Общайся. Живи.</div>
+          <div className="hero__poster hero__poster--coral">Джаз вдохновляет.</div>
+          <div className="hero__poster hero__poster--orange">Танцы объединяют.</div>
         </div>
       </section>
 
       <section className="section" id="directions" aria-labelledby="directions-title">
         <div className="section__header">
           <p className="section__eyebrow">Направления</p>
-          <h2 id="directions-title">Танцы, музыка и практика</h2>
+          <h2 id="directions-title">Танцы, практика и живое общение</h2>
+          <p>
+            Регулярные занятия и встречи для тех, кто хочет расти в танце и быть
+            частью активного сообщества.
+          </p>
         </div>
         <div className="directions">
           {directions.map((direction) => (
             <article className="direction-card" key={direction.title}>
               <h3>{direction.title}</h3>
-              <p>{direction.description}</p>
+              <p>{renderHighlightedText(direction.description)}</p>
             </article>
           ))}
         </div>
@@ -71,175 +121,188 @@ export function HomePage() {
 
       <section className="section about" id="about" aria-labelledby="about-title">
         <div className="section__header">
-          <p className="section__eyebrow">О школе</p>
-          <h2 id="about-title">Тёплое сообщество вокруг джаза</h2>
+          <p className="section__eyebrow">О нас</p>
+          <h2 id="about-title">
+            Dance&Friends строится вокруг <span className="about__title-accent">людей</span>, а
+            не только шагов
+          </h2>
         </div>
         <div className="about__grid">
           <p>
-            Jazz Time — это школа социальных танцев, где важны не только шаги,
-            но и люди. Мы собираем тёплое сообщество: поддерживаем новичков,
-            много смеёмся на занятиях и устраиваем весёлые вечеринки.
+            Мы собираем пространство, где комфортно начинать с нуля, пробовать
+            новое и постепенно находить собственный танцевальный голос.
           </p>
           <p>
-            Мы встречаемся не только в классе: гуляем, проводим время вместе
-            вне школы, ездим на фестивали в другие города, устраиваем
-            опен-эйры и вечеринки, а ещё ходим танцевать под живую музыку в
-            городе.
+            Кроме занятий встречаемся на практиках, вечеринках, опен-эйрах и
+            городских событиях. Танец для нас продолжается и вне класса.
           </p>
           <p>
-            Постоянные занятия откроются в сентябре 2026 года в своём зале.
-            До конца лета встречаемся на самоподготовках, специальных
-            практиках и открытых танцевальных событиях.
+            Актуальные мероприятия публикуются в таблице и дублируются в группе
+            ВК, чтобы расписание всегда оставалось живым и быстро обновлялось.
           </p>
         </div>
       </section>
 
       <section className="section schedule" id="schedule" aria-labelledby="schedule-title">
         <div className="section__header">
-          <p className="section__eyebrow">Расписание</p>
-          <h2 id="schedule-title">Май — июль 2026</h2>
+          <p className="section__eyebrow">Мероприятия</p>
+          <h2 id="schedule-title">Ближайшие встречи и практики</h2>
+          <p>Показываем все месяцы, начиная с текущего, в которых есть события.</p>
         </div>
 
-        <div className="calendar-controls" aria-label="Переключение месяца">
-          <button
-            className="calendar-button"
-            type="button"
-            onClick={() => setActiveMonthIndex((index) => Math.max(0, index - 1))}
-            disabled={isFirstMonth}
-            aria-label="Предыдущий месяц"
-          >
-            <span className="calendar-button__arrow" aria-hidden="true">
-              ›
-            </span>
-          </button>
-          <span>{activeMonth.title}</span>
-          <button
-            className="calendar-button"
-            type="button"
-            onClick={() =>
-              setActiveMonthIndex((index) => Math.min(calendarMonths.length - 1, index + 1))
-            }
-            disabled={isLastMonth}
-            aria-label="Следующий месяц"
-          >
-            <span className="calendar-button__arrow" aria-hidden="true">
-              ›
-            </span>
-          </button>
-        </div>
+        {status === 'loading' ? (
+          <div className="schedule-state" role="status">
+            Загружаем мероприятия из Google Sheets...
+          </div>
+        ) : null}
 
-        <div className="calendar" aria-label="Календарь событий Jazz Time">
-          <article className="calendar-month" key={activeMonth.title}>
-            <h3>{activeMonth.title}</h3>
-            <div className="calendar-month__weekdays" aria-hidden="true">
-              {weekdays.map((day) => (
-                <span key={day}>{day}</span>
-              ))}
-            </div>
-            <div className="calendar-month__grid">
-              {Array.from({ length: activeMonth.offset }, (_, index) => (
-                <span
-                  className="calendar-day calendar-day--empty"
-                  key={`${activeMonth.title}-empty-${index}`}
-                />
-              ))}
-              {activeMonth.days.map((day) => (
-                <div
-                  className={
-                    day.events.length > 0
-                      ? 'calendar-day calendar-day--event'
-                      : 'calendar-day'
-                  }
-                  key={`${activeMonth.title}-${day.day}`}
-                  tabIndex={day.events.length > 0 ? 0 : undefined}
-                >
-                  <span className="calendar-day__number">{day.day}</span>
-                  {day.events.map((event) => (
-                    <span className="calendar-day__event" key={event.title + event.time}>
-                      <span className="calendar-day__label">
-                        <strong>{event.time}</strong>
-                        <span className="calendar-day__title">{event.title}</span>
-                      </span>
-                      <span className="calendar-day__tooltip" role="tooltip">
-                        {event.href ? (
-                          <a href={event.href} target="_blank" rel="noreferrer">
-                            {event.title}
-                          </a>
-                        ) : (
-                          event.title
-                        )}
-                        <small>{event.description}</small>
-                      </span>
-                    </span>
-                  ))}
-                </div>
-              ))}
-            </div>
-          </article>
-        </div>
+        {status === 'error' ? (
+          <div className="schedule-state schedule-state--error" role="alert">
+            {errorMessage}
+          </div>
+        ) : null}
 
-        <div className="mobile-schedule" aria-label="Список событий Jazz Time">
-          {mobileScheduleMonths.map((month) => (
-            <article
-              className={
-                month.title === openMobileMonthTitle
-                  ? 'mobile-schedule__month mobile-schedule__month--open'
-                  : 'mobile-schedule__month'
-              }
-              key={month.title}
-            >
+        {status === 'ready' && months.length === 0 ? (
+          <div className="schedule-state" role="status">
+            В таблице пока нет ближайших мероприятий.
+          </div>
+        ) : null}
+
+        {status === 'ready' && months.length > 0 ? (
+          <>
+            <div className="calendar-controls" aria-label="Переключение месяца">
               <button
-                className="mobile-schedule__summary"
+                className="calendar-button"
                 type="button"
-                aria-expanded={month.title === openMobileMonthTitle}
-                onClick={() =>
-                  setOpenMobileMonthTitle((currentTitle) =>
-                    currentTitle === month.title ? '' : month.title,
-                  )
-                }
+                onClick={() => setActiveMonthIndex((index) => Math.max(0, index - 1))}
+                disabled={isFirstMonth}
+                aria-label="Предыдущий месяц"
               >
-                <span>{month.title}</span>
-                <span className="mobile-schedule__arrow" aria-hidden="true">
+                <span className="calendar-button__arrow" aria-hidden="true">
+                  ‹
+                </span>
+              </button>
+              <span>{activeMonth.title}</span>
+              <button
+                className="calendar-button"
+                type="button"
+                onClick={() =>
+                  setActiveMonthIndex((index) => Math.min(months.length - 1, index + 1))
+                }
+                disabled={isLastMonth}
+                aria-label="Следующий месяц"
+              >
+                <span className="calendar-button__arrow" aria-hidden="true">
                   ›
                 </span>
               </button>
-              <div className="mobile-schedule__events">
-                {month.events.map((event) => (
-                  <article className="mobile-schedule__event" key={`${event.date}-${event.title}`}>
-                    <time dateTime={event.date}>
-                      <strong>{getDayNumber(event.date)}</strong>
-                      <span>{getWeekday(event.date)}</span>
-                    </time>
-                    <div>
-                      <p>
-                        <strong>{event.time}</strong>{' '}
-                        {event.href ? (
-                          <a href={event.href} target="_blank" rel="noreferrer">
+            </div>
+
+            <div className="calendar" aria-label="Календарь событий Dance&Friends">
+              <article className="calendar-month" key={activeMonth.key}>
+                <h3>{activeMonth.title}</h3>
+                <div className="calendar-month__title">{activeMonth.title}</div>
+                <div className="calendar-month__weekdays" aria-hidden="true">
+                  {weekdays.map((day) => (
+                    <span key={day}>{day}</span>
+                  ))}
+                </div>
+                <div className="calendar-month__grid">
+                  {Array.from({ length: activeMonth.offset }, (_, index) => (
+                    <span
+                      className="calendar-day calendar-day--empty"
+                      key={`${activeMonth.key}-empty-${index}`}
+                    />
+                  ))}
+                  {activeMonth.days.map((day) => (
+                    <div
+                      className={
+                        day.events.length > 0
+                          ? 'calendar-day calendar-day--event'
+                          : 'calendar-day'
+                      }
+                      key={`${activeMonth.key}-${day.day}`}
+                      tabIndex={day.events.length > 0 ? 0 : undefined}
+                    >
+                      <span className="calendar-day__number">{day.day}</span>
+                      {day.events.map((event) => (
+                        <span className="calendar-day__event" key={event.title + event.time}>
+                          <span className="calendar-day__label">
+                            <strong>{event.time}</strong>
+                            <span className="calendar-day__title">{event.title}</span>
+                          </span>
+                          <span className="calendar-day__tooltip" role="tooltip">
                             {event.title}
-                          </a>
-                        ) : (
-                          event.title
-                        )}
-                      </p>
-                      <small>{event.description}</small>
+                            <small>{event.description}</small>
+                          </span>
+                        </span>
+                      ))}
                     </div>
-                  </article>
-                ))}
-              </div>
-            </article>
-          ))}
-        </div>
+                  ))}
+                </div>
+              </article>
+            </div>
+
+            <div className="mobile-schedule" aria-label="Список событий Dance&Friends">
+              {months.map((month) => (
+                <article
+                  className={
+                    month.title === openMobileMonthTitle
+                      ? 'mobile-schedule__month mobile-schedule__month--open'
+                      : 'mobile-schedule__month'
+                  }
+                  key={month.key}
+                >
+                  <button
+                    className="mobile-schedule__summary"
+                    type="button"
+                    aria-expanded={month.title === openMobileMonthTitle}
+                    onClick={() =>
+                      setOpenMobileMonthTitle((currentTitle) =>
+                        currentTitle === month.title ? '' : month.title,
+                      )
+                    }
+                  >
+                    <span>{month.title}</span>
+                    <span className="mobile-schedule__arrow" aria-hidden="true">
+                      ›
+                    </span>
+                  </button>
+                  <div className="mobile-schedule__events">
+                    {month.events.map((event) => (
+                      <article
+                        className="mobile-schedule__event"
+                        key={`${event.date}-${event.time}-${event.title}`}
+                      >
+                        <time dateTime={event.date}>
+                          <strong>{getDayNumber(event.date)}</strong>
+                          <span>{getWeekday(event.date)}</span>
+                        </time>
+                        <div>
+                          <p>
+                            <strong>{event.time}</strong> {event.title}
+                          </p>
+                          <small>{event.description}</small>
+                        </div>
+                      </article>
+                    ))}
+                  </div>
+                </article>
+              ))}
+            </div>
+          </>
+        ) : null}
       </section>
 
       <section className="contacts" id="contacts" aria-label="Контакты">
         <div className="contacts__intro">
           <p className="section__eyebrow">Контакты</p>
-          <p>Напишите, чтобы уточнить расписание, формат практики или прийти впервые.</p>
+          <p>Пишите, если хотите прийти впервые, уточнить формат встречи или задать вопрос.</p>
         </div>
         <div className="contacts__cards">
           <a
             className="contact-card contact-card--vk"
-            href="https://vk.com/jazztimeomsk"
+            href={vkGroupUrl}
             target="_blank"
             rel="noreferrer"
           >
@@ -247,8 +310,8 @@ export function HomePage() {
               VK
             </span>
             <span>
-              <strong>Группа Jazz Time</strong>
-              <small>Новости, анонсы и обсуждения</small>
+              <strong>Группа Dance&Friends</strong>
+              <small>Анонсы, новости и все обновления по мероприятиям</small>
             </span>
           </a>
           <div className="contact-card contact-card--person">
@@ -265,32 +328,19 @@ export function HomePage() {
 }
 
 function scrollToSection(id: string) {
-  document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' })
+  document.getElementById(id)?.scrollIntoView({ behavior: 'smooth', block: 'start' })
 }
 
-function getDate(date: string) {
-  return new Date(`${date}T12:00:00+06:00`)
-}
+function renderHighlightedText(text: string) {
+  return text.split(/(\*\*.*?\*\*)/g).map((part, index) => {
+    if (part.startsWith('**') && part.endsWith('**')) {
+      return (
+        <span className="direction-card__highlight" key={`${part}-${index}`}>
+          {part.slice(2, -2)}
+        </span>
+      )
+    }
 
-function getMonthTitle(date: string) {
-  return getMonthTitleFromDate(getDate(date))
-}
-
-function getMonthTitleFromDate(parsedDate: Date) {
-  const month = new Intl.DateTimeFormat('ru-RU', { month: 'long' }).format(parsedDate)
-  return `${capitalize(month)} ${parsedDate.getFullYear()}`
-}
-
-function getDayNumber(date: string) {
-  return getDate(date).getDate()
-}
-
-function getWeekday(date: string) {
-  return new Intl.DateTimeFormat('ru-RU', { weekday: 'short' })
-    .format(getDate(date))
-    .replace('.', '')
-}
-
-function capitalize(value: string) {
-  return value.charAt(0).toUpperCase() + value.slice(1)
+    return part
+  })
 }
