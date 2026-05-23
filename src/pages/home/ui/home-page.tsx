@@ -129,8 +129,11 @@ export function HomePage() {
         <div className="section__header">
           <p className="section__eyebrow">О нас</p>
           <h2 id="about-title">
-            Dance&Friends строится вокруг <span className="about__title-accent">людей</span>, а
-            не только шагов
+            Dance&Friends
+            <span className="about__title-subline">
+              строится вокруг <span className="about__title-accent">людей</span>,<br />
+              а не только шагов
+            </span>
           </h2>
         </div>
         <div className="about__grid">

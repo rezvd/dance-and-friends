@@ -250,6 +250,13 @@
   color: var(--accent);
 }
 
+.about__title-subline {
+  display: block;
+  margin-top: 10px;
+  font-size: 0.8em;
+  line-height: 1.15;
+}
+
 .about__grid p:nth-child(1) {
   background: #4c9faa;
 }
@@ -324,7 +331,7 @@
   gap: 16px;
 }
 
-.calendar-controls span {
+.calendar-controls > span {
   color: var(--text);
   font-size: 28px;
   font-weight: 800;
@@ -363,9 +370,14 @@
 
 .calendar-button__arrow {
   display: inline-flex;
-  font-size: 32px;
+  width: 100%;
+  height: 100%;
+  align-items: center;
+  justify-content: center;
+  font-size: 40px;
   font-weight: 700;
-  line-height: 1;
+  line-height: 0.8;
+  color: #ffffff;
 }
 
 .calendar {
