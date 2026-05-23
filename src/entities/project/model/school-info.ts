@@ -8,7 +8,10 @@ export type ScheduleEvent = {
   time: string
   title: string
   description: string
+  type: EventType
 }
+
+export type EventType = 'class' | 'event'
 
 export type CalendarDay = {
   day: number
@@ -22,6 +25,21 @@ export type CalendarMonth = {
   days: CalendarDay[]
   events: ScheduleEvent[]
 }
+
+export type CalendarWeek = {
+  key: string
+  title: string
+  events: ScheduleEvent[]
+}
+
+export const eventTypeOptions: Array<{
+  value: EventType | 'all'
+  label: string
+}> = [
+  { value: 'all', label: 'Все' },
+  { value: 'class', label: 'Занятия' },
+  { value: 'event', label: 'Мероприятия' },
+]
 
 export const directions: DanceDirection[] = [
   {
@@ -93,6 +111,16 @@ export function buildTimeLabel(start: string, end?: string) {
   return end ? `${start}-${end}` : start
 }
 
+export function parseEventType(value: string): EventType {
+  const normalized = value.trim().toLowerCase()
+
+  if (normalized === 'занятие') {
+    return 'class'
+  }
+
+  return 'event'
+}
+
 export function buildCalendarMonths(events: ScheduleEvent[], today = new Date()): CalendarMonth[] {
   const currentMonthStart = new Date(today.getFullYear(), today.getMonth(), 1)
 
@@ -131,4 +159,79 @@ export function buildCalendarMonths(events: ScheduleEvent[], today = new Date())
       events: monthEvents,
     }
   })
+}
+
+const shortMonthFormatter = new Intl.DateTimeFormat('ru-RU', {
+  month: 'short',
+})
+
+export function startOfWeek(date: Date) {
+  const normalized = new Date(date.getFullYear(), date.getMonth(), date.getDate())
+  const day = normalized.getDay()
+  const diff = day === 0 ? -6 : 1 - day
+  normalized.setDate(normalized.getDate() + diff)
+  return normalized
+}
+
+export function buildCalendarWeeks(events: ScheduleEvent[], today = new Date()): CalendarWeek[] {
+  const currentWeekStart = startOfWeek(today)
+  const upcomingEvents = events.filter((event) => parseIsoDate(event.date) >= currentWeekStart)
+  const grouped = new Map<string, ScheduleEvent[]>()
+
+  for (const event of upcomingEvents) {
+    const blockStart = startOfTwoWeekBlock(parseIsoDate(event.date), currentWeekStart)
+    const key = toDateKey(blockStart)
+    const group = grouped.get(key)
+
+    if (group) {
+      group.push(event)
+    } else {
+      grouped.set(key, [event])
+    }
+  }
+
+  return Array.from(grouped.entries()).map(([key, weekEvents]) => {
+    const weekStart = parseIsoDate(key)
+    const weekEnd = new Date(
+      weekStart.getFullYear(),
+      weekStart.getMonth(),
+      weekStart.getDate() + 13,
+    )
+
+    return {
+      key,
+      title: `${weekStart.getDate()}-${weekEnd.getDate()} ${formatWeekMonthLabel(weekStart, weekEnd)}`,
+      events: weekEvents,
+    }
+  })
+}
+
+function formatWeekMonthLabel(weekStart: Date, weekEnd: Date) {
+  if (weekStart.getMonth() === weekEnd.getMonth()) {
+    return shortMonthFormatter.format(weekStart).replace('.', '')
+  }
+
+  return `${shortMonthFormatter.format(weekStart).replace('.', '')} — ${shortMonthFormatter
+    .format(weekEnd)
+    .replace('.', '')}`
+}
+
+function toDateKey(date: Date) {
+  const year = date.getFullYear()
+  const month = String(date.getMonth() + 1).padStart(2, '0')
+  const day = String(date.getDate()).padStart(2, '0')
+  return `${year}-${month}-${day}`
+}
+
+function startOfTwoWeekBlock(date: Date, currentWeekStart: Date) {
+  const weekStart = startOfWeek(date)
+  const diffDays = Math.floor(
+    (weekStart.getTime() - currentWeekStart.getTime()) / (1000 * 60 * 60 * 24),
+  )
+  const blockOffset = Math.floor(diffDays / 14) * 14
+  return new Date(
+    currentWeekStart.getFullYear(),
+    currentWeekStart.getMonth(),
+    currentWeekStart.getDate() + blockOffset,
+  )
 }

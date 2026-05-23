@@ -1,12 +1,14 @@
 import { useEffect, useState } from 'react'
 
 import {
+  buildCalendarWeeks,
   buildCalendarMonths,
   directions,
+  eventTypeOptions,
   getDayNumber,
-  getMonthTitleFromDate,
   getWeekday,
-  type CalendarMonth,
+  type EventType,
+  type ScheduleEvent,
 } from '@/entities/project/model/school-info'
 import { fetchScheduleEvents } from '@/entities/project/model/sheets'
 import { Button } from '@/shared/ui/button'
@@ -18,9 +20,10 @@ const vkGroupUrl =
   import.meta.env.VITE_VK_GROUP_URL ?? 'https://vk.com/club238903782'
 
 export function HomePage() {
-  const [months, setMonths] = useState<CalendarMonth[]>([])
+  const [events, setEvents] = useState<ScheduleEvent[]>([])
+  const [selectedType, setSelectedType] = useState<EventType | 'all'>('all')
   const [activeMonthIndex, setActiveMonthIndex] = useState(0)
-  const [openMobileMonthTitle, setOpenMobileMonthTitle] = useState('')
+  const [openMobileWeekKey, setOpenMobileWeekKey] = useState('')
   const [status, setStatus] = useState<'loading' | 'ready' | 'error'>('loading')
   const [errorMessage, setErrorMessage] = useState('')
 
@@ -28,19 +31,12 @@ export function HomePage() {
     let cancelled = false
 
     fetchScheduleEvents()
-      .then((events) => {
+      .then((nextEvents) => {
         if (cancelled) {
           return
         }
 
-        const nextMonths = buildCalendarMonths(events)
-        setMonths(nextMonths)
-        setActiveMonthIndex(0)
-        setOpenMobileMonthTitle(
-          nextMonths.find((month) => month.title === getMonthTitleFromDate(new Date()))?.title ??
-            nextMonths[0]?.title ??
-            '',
-        )
+        setEvents(nextEvents)
         setStatus('ready')
         setErrorMessage('')
       })
@@ -61,6 +57,16 @@ export function HomePage() {
       cancelled = true
     }
   }, [])
+
+  const filteredEvents =
+    selectedType === 'all' ? events : events.filter((event) => event.type === selectedType)
+  const months = buildCalendarMonths(filteredEvents)
+  const weeks = buildCalendarWeeks(filteredEvents)
+
+  useEffect(() => {
+    setActiveMonthIndex(0)
+    setOpenMobileWeekKey(weeks[0]?.key ?? '')
+  }, [selectedType, events])
 
   const activeMonth = months[activeMonthIndex]
   const isFirstMonth = activeMonthIndex === 0
@@ -146,8 +152,25 @@ export function HomePage() {
       <section className="section schedule" id="schedule" aria-labelledby="schedule-title">
         <div className="section__header">
           <p className="section__eyebrow">Мероприятия</p>
-          <h2 id="schedule-title">Ближайшие встречи и практики</h2>
-          <p>Показываем все месяцы, начиная с текущего, в которых есть события.</p>
+          <h2 id="schedule-title">Ближайшие занятия и мероприятия</h2>
+          <p>Фильтруйте занятия и мероприятия. На мобильных показываем расписание блоками по две недели.</p>
+        </div>
+
+        <div className="schedule-filters" aria-label="Фильтр по типу событий">
+          {eventTypeOptions.map((option) => (
+            <button
+              className={
+                option.value === selectedType
+                  ? `schedule-filter schedule-filter--${option.value} schedule-filter--active`
+                  : `schedule-filter schedule-filter--${option.value}`
+              }
+              key={option.value}
+              type="button"
+              onClick={() => setSelectedType(option.value)}
+            >
+              {option.label}
+            </button>
+          ))}
         </div>
 
         {status === 'loading' ? (
@@ -218,7 +241,7 @@ export function HomePage() {
                     <div
                       className={
                         day.events.length > 0
-                          ? 'calendar-day calendar-day--event'
+                          ? `calendar-day calendar-day--event calendar-day--type-${day.events[0].type}`
                           : 'calendar-day'
                       }
                       key={`${activeMonth.key}-${day.day}`}
@@ -226,12 +249,18 @@ export function HomePage() {
                     >
                       <span className="calendar-day__number">{day.day}</span>
                       {day.events.map((event) => (
-                        <span className="calendar-day__event" key={event.title + event.time}>
+                        <span
+                          className={`calendar-day__event calendar-day__event--${event.type}`}
+                          key={event.title + event.time}
+                        >
                           <span className="calendar-day__label">
                             <strong>{event.time}</strong>
                             <span className="calendar-day__title">{event.title}</span>
                           </span>
-                          <span className="calendar-day__tooltip" role="tooltip">
+                          <span
+                            className={`calendar-day__tooltip calendar-day__tooltip--${event.type}`}
+                            role="tooltip"
+                          >
                             {event.title}
                             <small>{event.description}</small>
                           </span>
@@ -244,34 +273,34 @@ export function HomePage() {
             </div>
 
             <div className="mobile-schedule" aria-label="Список событий Dance&Friends">
-              {months.map((month) => (
+              {weeks.map((week) => (
                 <article
                   className={
-                    month.title === openMobileMonthTitle
+                    week.key === openMobileWeekKey
                       ? 'mobile-schedule__month mobile-schedule__month--open'
                       : 'mobile-schedule__month'
                   }
-                  key={month.key}
+                  key={week.key}
                 >
                   <button
                     className="mobile-schedule__summary"
                     type="button"
-                    aria-expanded={month.title === openMobileMonthTitle}
+                    aria-expanded={week.key === openMobileWeekKey}
                     onClick={() =>
-                      setOpenMobileMonthTitle((currentTitle) =>
-                        currentTitle === month.title ? '' : month.title,
+                      setOpenMobileWeekKey((currentKey) =>
+                        currentKey === week.key ? '' : week.key,
                       )
                     }
                   >
-                    <span>{month.title}</span>
+                    <span>{week.title}</span>
                     <span className="mobile-schedule__arrow" aria-hidden="true">
                       ›
                     </span>
                   </button>
                   <div className="mobile-schedule__events">
-                    {month.events.map((event) => (
+                    {week.events.map((event) => (
                       <article
-                        className="mobile-schedule__event"
+                        className={`mobile-schedule__event mobile-schedule__event--${event.type}`}
                         key={`${event.date}-${event.time}-${event.title}`}
                       >
                         <time dateTime={event.date}>

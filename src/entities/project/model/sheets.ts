@@ -1,5 +1,6 @@
 import {
   buildTimeLabel,
+  parseEventType,
   type ScheduleEvent,
   toIsoDate,
 } from '@/entities/project/model/school-info'
@@ -28,9 +29,9 @@ function requireEnv(value: string | undefined, name: string) {
 }
 
 function normalizeEventRow(row: string[]): ScheduleEvent | null {
-  const [date = '', start = '', end = '', title = '', description = ''] = row
+  const [date = '', start = '', end = '', title = '', type = '', description = ''] = row
 
-  if (!date || !start || !title) {
+  if (!date || !start || !title || !type) {
     return null
   }
 
@@ -39,6 +40,7 @@ function normalizeEventRow(row: string[]): ScheduleEvent | null {
     time: buildTimeLabel(start, end),
     title: title.trim(),
     description: description.trim(),
+    type: parseEventType(type),
   }
 }
 
@@ -64,7 +66,7 @@ export async function fetchScheduleEvents() {
     throw new Error('В Google Sheets не найден ни один лист')
   }
 
-  const range = encodeURIComponent(`${firstSheetTitle}!A:E`)
+  const range = encodeURIComponent(`${firstSheetTitle}!A:F`)
   const valuesResponse = await fetch(
     `https://sheets.googleapis.com/v4/spreadsheets/${safeSpreadsheetId}/values/${range}?key=${safeApiKey}`,
   )
