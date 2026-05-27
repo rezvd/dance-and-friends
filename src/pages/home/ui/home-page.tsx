@@ -24,6 +24,7 @@ export function HomePage() {
   const [selectedType, setSelectedType] = useState<EventType | 'all'>('all')
   const [activeMonthIndex, setActiveMonthIndex] = useState(0)
   const [openMobileWeekKey, setOpenMobileWeekKey] = useState('')
+  const [isScrollTopVisible, setIsScrollTopVisible] = useState(false)
   const [status, setStatus] = useState<'loading' | 'ready' | 'error'>('loading')
   const [errorMessage, setErrorMessage] = useState('')
 
@@ -67,6 +68,19 @@ export function HomePage() {
     setActiveMonthIndex(0)
     setOpenMobileWeekKey(weeks[0]?.key ?? '')
   }, [selectedType, events])
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrollTopVisible(window.scrollY > 480)
+    }
+
+    handleScroll()
+    window.addEventListener('scroll', handleScroll, { passive: true })
+
+    return () => {
+      window.removeEventListener('scroll', handleScroll)
+    }
+  }, [])
 
   const activeMonth = months[activeMonthIndex]
   const isFirstMonth = activeMonthIndex === 0
@@ -355,12 +369,27 @@ export function HomePage() {
           </div>
         </div>
       </section>
+
+      {isScrollTopVisible ? (
+        <button
+          className="scroll-top-button"
+          type="button"
+          aria-label="Наверх"
+          onClick={scrollToTop}
+        >
+          ↑
+        </button>
+      ) : null}
     </div>
   )
 }
 
 function scrollToSection(id: string) {
   document.getElementById(id)?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+}
+
+function scrollToTop() {
+  window.scrollTo({ top: 0, behavior: 'smooth' })
 }
 
 function renderHighlightedText(text: string) {
