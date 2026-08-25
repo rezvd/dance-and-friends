@@ -1,0 +1,256 @@
+.contacts-page {
+  min-height: 100vh;
+  padding-bottom: 96px;
+}
+
+.contacts-page__hero {
+  padding: 72px 24px 80px;
+  color: #ffffff;
+  background: var(--accent-strong);
+  font-weight: var(--on-color-font-weight);
+}
+
+.contacts-page__hero-inner,
+.contacts-page__content {
+  width: min(1120px, 100%);
+  margin: 0 auto;
+}
+
+.contacts-page h1 {
+  margin: 0;
+  font-size: clamp(40px, 6vw, 72px);
+  line-height: 0.94;
+  letter-spacing: -0.055em;
+}
+
+.contacts-page__content {
+  padding: 72px 24px 0;
+}
+
+.contacts-socials {
+  overflow: hidden;
+  padding: 24px 28px;
+  border-radius: var(--radius);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 10px;
+  background: var(--accent);
+  box-shadow: var(--shadow);
+}
+
+.contacts-social-card {
+  width: fit-content;
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  color: #ffffff;
+  font-size: 20px;
+  font-weight: 800;
+  text-decoration: none;
+}
+
+.contacts-social-card__icon {
+  width: 36px;
+  height: 36px;
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.contacts-social-card__icon img {
+  width: 32px;
+  height: 32px;
+  display: block;
+  filter: brightness(0) invert(1);
+}
+
+.venue {
+  display: grid;
+  grid-template-columns: minmax(320px, 0.8fr) minmax(0, 1.2fr);
+  gap: 22px;
+  align-items: stretch;
+}
+
+.venue__details {
+  display: grid;
+  grid-template-rows: auto 1fr;
+  gap: 22px;
+}
+
+.venue__info,
+.venue__map {
+  overflow: hidden;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+}
+
+.venue__info {
+  min-height: 440px;
+  padding: 36px;
+  color: #ffffff;
+  background: #f2a045;
+  font-weight: var(--on-color-font-weight);
+}
+
+.venue__map {
+  min-height: 100%;
+}
+
+.venue__info h2 {
+  margin: 0;
+  font-size: clamp(30px, 4vw, 44px);
+  line-height: 1;
+  letter-spacing: -0.04em;
+}
+
+.venue-plan > h2 {
+  margin: 0;
+  font-size: clamp(28px, 4vw, 42px);
+  line-height: 1;
+  letter-spacing: -0.04em;
+}
+
+.venue__studio {
+  margin: 26px 0 0;
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 1.45;
+}
+
+.venue__info address {
+  margin-top: 28px;
+  display: grid;
+  gap: 6px;
+  font-style: normal;
+}
+
+.venue__info address strong {
+  color: rgba(255, 255, 255, 0.72);
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.venue__info address span,
+.venue__transport {
+  font-size: 17px;
+  line-height: 1.55;
+}
+
+.venue__transport {
+  margin: 24px 0 0;
+}
+
+.venue__map iframe {
+  width: 100%;
+  height: 100%;
+  border: 0;
+  display: block;
+}
+
+.venue-plan {
+  padding-top: 88px;
+}
+
+.venue-plan > h2 {
+  color: var(--text);
+}
+
+.venue-plan__content {
+  margin-top: 32px;
+  display: grid;
+  grid-template-columns: minmax(260px, 0.8fr) minmax(0, 560px);
+  gap: 32px;
+  align-items: start;
+}
+
+.venue-plan__copy {
+  padding: 28px;
+  border: 1px solid rgba(30, 30, 30, 0.08);
+  border-radius: var(--radius);
+  background: var(--surface);
+  box-shadow: var(--shadow);
+}
+
+.venue-plan__copy p {
+  margin: 0;
+  color: var(--text-muted);
+  font-size: 17px;
+  line-height: 1.65;
+}
+
+.venue-plan__copy p + p {
+  margin-top: 12px;
+  color: var(--text);
+  font-weight: 700;
+}
+
+.venue-plan figure {
+  width: 100%;
+  margin: 0;
+  overflow: hidden;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+}
+
+.venue-plan img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+@media (max-width: 820px) {
+  .venue {
+    grid-template-columns: 1fr;
+  }
+
+  .venue-plan__content {
+    grid-template-columns: 1fr;
+  }
+
+  .venue__map {
+    min-height: 380px;
+  }
+}
+
+@media (max-width: 640px) {
+  .contacts-page {
+    padding-bottom: 64px;
+  }
+
+  .contacts-page__hero {
+    padding: 36px 16px 56px;
+  }
+
+  .contacts-page__content {
+    padding: 48px 16px 0;
+  }
+
+  .contacts-socials {
+    padding: 20px 22px;
+    gap: 8px;
+  }
+
+  .contacts-social-card {
+    font-size: 18px;
+  }
+
+  .venue__info {
+    min-height: auto;
+    padding: 28px 22px;
+  }
+
+  .venue__map {
+    min-height: 360px;
+  }
+
+  .venue-plan {
+    padding-top: 64px;
+  }
+
+  .venue-plan__copy {
+    padding: 24px 22px;
+  }
+}

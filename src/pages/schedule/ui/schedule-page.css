@@ -1,0 +1,162 @@
+.schedule-page {
+  min-height: 100vh;
+  padding-bottom: 96px;
+}
+
+.schedule-page__hero {
+  padding: 72px 24px 80px;
+  color: #ffffff;
+  background: var(--accent);
+  font-weight: var(--on-color-font-weight);
+}
+
+.schedule-page__hero-inner,
+.schedule-page__content {
+  width: min(1180px, 100%);
+  margin: 0 auto;
+}
+
+.schedule-page h1 {
+  margin: 0;
+  font-size: clamp(40px, 6vw, 72px);
+  line-height: 0.94;
+  letter-spacing: -0.055em;
+}
+
+.schedule-page__content {
+  padding: 72px 24px 0;
+}
+
+.schedule-page__image {
+  margin: 0;
+  overflow: hidden;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+}
+
+.schedule-page__image img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.schedule-page__start {
+  margin-bottom: 24px;
+  padding: 20px 24px;
+  border-radius: var(--radius);
+  color: #ffffff;
+  background: var(--accent-strong);
+  box-shadow: var(--shadow);
+  font-size: clamp(18px, 2.5vw, 24px);
+  font-weight: 800;
+  line-height: 1.1;
+}
+
+.schedule-teachers {
+  padding-top: 88px;
+}
+
+.schedule-teachers > h2 {
+  margin: 0;
+  color: var(--text);
+  font-size: clamp(36px, 5vw, 56px);
+  line-height: 1;
+  letter-spacing: -0.04em;
+}
+
+.schedule-teachers__grid {
+  margin-top: 32px;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 20px;
+}
+
+.schedule-teacher-card {
+  min-height: 330px;
+  padding: 30px;
+  border-radius: var(--radius);
+  color: #ffffff;
+  box-shadow: var(--shadow);
+  font-weight: var(--on-color-font-weight);
+}
+
+.schedule-teacher-card--lindy {
+  background: var(--accent-strong);
+}
+
+.schedule-teacher-card--blues {
+  background: var(--accent);
+}
+
+.schedule-teacher-card--balboa {
+  background: #f2a045;
+}
+
+.schedule-teacher-card h3 {
+  margin: 0;
+  font-size: 28px;
+  line-height: 1.1;
+}
+
+.schedule-teacher-card dl {
+  margin: 28px 0 0;
+  display: grid;
+  gap: 22px;
+}
+
+.schedule-teacher-card dl div {
+  display: grid;
+  gap: 5px;
+}
+
+.schedule-teacher-card dt {
+  color: rgba(255, 255, 255, 0.72);
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.schedule-teacher-card dd {
+  margin: 0;
+  color: #ffffff;
+  font-size: 17px;
+  font-weight: 700;
+  line-height: 1.45;
+}
+
+@media (max-width: 900px) {
+  .schedule-teachers__grid {
+    grid-template-columns: 1fr;
+  }
+
+  .schedule-teacher-card {
+    min-height: auto;
+  }
+}
+
+@media (max-width: 760px) {
+  .schedule-page {
+    padding-bottom: 64px;
+  }
+
+  .schedule-page__hero {
+    padding: 36px 16px 56px;
+  }
+
+  .schedule-page__content {
+    padding: 48px 16px 0;
+  }
+
+  .schedule-page__start {
+    padding: 18px 20px;
+  }
+
+  .schedule-teachers {
+    padding-top: 64px;
+  }
+
+  .schedule-teacher-card {
+    padding: 26px 22px;
+  }
+}

@@ -11,7 +11,7 @@
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 
-  --bg: #f7f7f4;
+  --bg: #f9f2e7;
   --surface: #ffffff;
   --surface-strong: #fffdf8;
   --text: #1e1e1e;
@@ -23,6 +23,7 @@
   --accent-strong: #ff6f6f;
   --accent-warm: #ffb46f;
   --ink: #1e1e1e;
+  --on-color-font-weight: 500;
   --shadow: 0 12px 36px rgba(30, 30, 30, 0.08);
   --radius: 22px;
 }

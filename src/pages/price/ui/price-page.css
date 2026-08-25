@@ -1,0 +1,245 @@
+.price-page {
+  min-height: 100vh;
+  padding-bottom: 96px;
+}
+
+.price-page__hero {
+  padding: 72px 24px 80px;
+  color: #ffffff;
+  background: #f2a045;
+  font-weight: var(--on-color-font-weight);
+}
+
+.price-page__hero-inner,
+.price-page__content {
+  width: min(1120px, 100%);
+  margin: 0 auto;
+}
+
+.price-page h1 {
+  max-width: 940px;
+  margin: 0;
+  font-size: clamp(40px, 6vw, 72px);
+  line-height: 0.94;
+  letter-spacing: -0.055em;
+}
+
+.price-page__content {
+  padding: 72px 24px 0;
+}
+
+.price-page__price-list {
+  width: min(520px, 100%);
+  margin: 0 auto;
+  overflow: hidden;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+}
+
+.price-page__price-list img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.price-rules {
+  padding-top: 88px;
+}
+
+.price-rules > h2,
+.payment h2 {
+  margin: 0;
+  color: var(--text);
+  font-size: clamp(36px, 5vw, 56px);
+  line-height: 1;
+  letter-spacing: -0.04em;
+}
+
+.price-rules__grid {
+  margin-top: 32px;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 20px;
+  align-items: stretch;
+}
+
+.price-rule-card {
+  padding: 28px;
+  border: 1px solid rgba(30, 30, 30, 0.08);
+  border-radius: var(--radius);
+  background: var(--surface);
+  box-shadow: var(--shadow);
+}
+
+.price-rule-card h3 {
+  margin: 0;
+  color: var(--accent);
+  font-size: 24px;
+  line-height: 1.15;
+}
+
+.price-rule-card:nth-child(2) h3,
+.price-rule-card:nth-child(4) h3 {
+  color: var(--accent-strong);
+}
+
+.price-rule-card p {
+  margin: 16px 0 0;
+  color: var(--text-muted);
+  font-size: 16px;
+  line-height: 1.65;
+}
+
+.price-page__free-note {
+  margin-top: 24px;
+  padding: 20px 24px;
+  border-radius: var(--radius);
+  color: #ffffff;
+  background: var(--accent);
+  box-shadow: var(--shadow);
+  font-size: clamp(18px, 2.5vw, 24px);
+  font-weight: 800;
+  line-height: 1.1;
+}
+
+.payment {
+  padding-top: 88px;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 22px;
+  align-items: stretch;
+}
+
+.payment__details,
+.payment__questions {
+  padding: 36px;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+}
+
+.payment__details {
+  color: #ffffff;
+  background: var(--accent-strong);
+  font-weight: var(--on-color-font-weight);
+}
+
+.payment__details h2,
+.payment__details p {
+  color: #ffffff;
+}
+
+.payment__details p,
+.payment__questions p {
+  margin: 18px 0 0;
+  font-size: 17px;
+  line-height: 1.6;
+}
+
+.payment h2 {
+  font-size: clamp(26px, 3vw, 34px);
+  letter-spacing: -0.025em;
+}
+
+.payment__phone {
+  display: inline-block;
+  margin-top: 32px;
+  color: #ffffff;
+  font-size: clamp(20px, 3vw, 26px);
+  font-weight: 800;
+  text-decoration: none;
+}
+
+.payment__recipient {
+  font-weight: 700;
+}
+
+.payment__questions {
+  background: var(--surface);
+  border: 1px solid rgba(30, 30, 30, 0.08);
+}
+
+.payment__questions p {
+  color: var(--text-muted);
+}
+
+.payment__socials {
+  margin-top: 28px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.payment__socials a {
+  min-height: 44px;
+  padding: 0 18px;
+  border-radius: 999px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: #ffffff;
+  background: var(--accent-strong);
+  font-size: 14px;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.payment__social-icon {
+  width: 20px;
+  height: 20px;
+  margin-right: 8px;
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.payment__social-icon img {
+  display: block;
+  width: 18px;
+  height: 18px;
+  filter: brightness(0) invert(1);
+}
+
+.payment__socials a:first-child {
+  background: var(--accent);
+}
+
+@media (max-width: 760px) {
+  .price-page {
+    padding-bottom: 64px;
+  }
+
+  .price-page__hero {
+    padding: 36px 16px 56px;
+  }
+
+  .price-page__content {
+    padding: 48px 16px 0;
+  }
+
+  .price-rules {
+    padding-top: 64px;
+  }
+
+  .price-rules__grid,
+  .payment {
+    grid-template-columns: 1fr;
+  }
+
+  .price-rule-card {
+    padding: 24px 22px;
+  }
+
+  .price-page__free-note {
+    padding: 18px 20px;
+  }
+
+  .payment {
+    padding-top: 64px;
+  }
+
+  .payment__details,
+  .payment__questions {
+    padding: 28px 22px;
+  }
+}

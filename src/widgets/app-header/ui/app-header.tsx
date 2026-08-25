@@ -1,6 +1,14 @@
 import './app-header.css'
 
 export function AppHeader() {
+  const pathname = window.location.pathname.replace(/\/+$/, '') || '/'
+  const isHomePage = pathname === '/'
+  const isDirectionsPage = pathname === '/directions'
+  const isTeachersPage = pathname === '/teachers'
+  const isPricePage = pathname === '/price'
+  const isSchedulePage = pathname === '/schedule'
+  const isContactsPage = pathname === '/contacts'
+
   return (
     <header className="app-header">
       <div className="app-header__inner">
@@ -10,10 +18,34 @@ export function AppHeader() {
           <span>FRIENDS</span>
         </a>
         <nav className="app-header__nav" aria-label="Main navigation">
-          <a href="#directions">Направления</a>
-          <a href="#about">О нас</a>
-          <a href="#schedule">Мероприятия</a>
-          <a href="#contacts">Контакты</a>
+          <a href={isHomePage ? '#about' : '/#about'}>О нас</a>
+          <a
+            href="/directions"
+            aria-current={isDirectionsPage ? 'page' : undefined}
+          >
+            Направления
+          </a>
+          <a
+            href="/teachers"
+            aria-current={isTeachersPage ? 'page' : undefined}
+          >
+            Преподаватели
+          </a>
+          <a href="/price" aria-current={isPricePage ? 'page' : undefined}>
+            Стоимость
+          </a>
+          <a
+            href="/schedule"
+            aria-current={isSchedulePage ? 'page' : undefined}
+          >
+            Расписание
+          </a>
+          <a
+            href="/contacts"
+            aria-current={isContactsPage ? 'page' : undefined}
+          >
+            Контакты
+          </a>
         </nav>
       </div>
     </header>

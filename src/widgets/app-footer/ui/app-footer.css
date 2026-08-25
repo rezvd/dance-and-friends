@@ -1,0 +1,125 @@
+.app-footer {
+  padding: 56px 24px 24px;
+  color: #ffffff;
+  background: var(--text);
+  font-weight: var(--on-color-font-weight);
+}
+
+.app-footer__inner,
+.app-footer__bottom {
+  width: min(1180px, 100%);
+  margin: 0 auto;
+}
+
+.app-footer__inner {
+  display: grid;
+  grid-template-columns: minmax(280px, 1.5fr) 1fr auto;
+  gap: 48px;
+  align-items: start;
+}
+
+.app-footer__brand {
+  display: inline-flex;
+  align-items: baseline;
+  color: #ffffff;
+  font-size: 30px;
+  font-weight: 800;
+  letter-spacing: -0.05em;
+  text-decoration: none;
+}
+
+.app-footer__ampersand {
+  color: var(--accent-strong);
+}
+
+.app-footer__intro p {
+  margin: 12px 0 0;
+  color: rgba(255, 255, 255, 0.62);
+  font-size: 14px;
+}
+
+.app-footer__nav {
+  display: grid;
+  gap: 10px;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.app-footer__nav a,
+.app-footer__social {
+  color: rgba(255, 255, 255, 0.78);
+  text-decoration: none;
+}
+
+.app-footer__nav a {
+  width: fit-content;
+}
+
+.app-footer__nav a:hover,
+.app-footer__social:hover {
+  color: #ffffff;
+}
+
+.app-footer__social {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.app-footer__socials {
+  display: grid;
+  min-width: 190px;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 14px;
+}
+
+.app-footer__social {
+  padding: 11px 12px;
+}
+
+.app-footer__social-icon {
+  width: 18px;
+  height: 18px;
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.app-footer__social-icon img {
+  width: 15px;
+  height: 15px;
+  display: block;
+  filter: brightness(0) invert(1);
+}
+
+.app-footer__bottom {
+  margin-top: 44px;
+  padding-top: 20px;
+  border-top: 1px solid rgba(255, 255, 255, 0.14);
+  display: flex;
+  justify-content: space-between;
+  gap: 24px;
+  color: rgba(255, 255, 255, 0.48);
+  font-size: 12px;
+}
+
+@media (max-width: 760px) {
+  .app-footer {
+    padding: 40px 16px 20px;
+  }
+
+  .app-footer__inner {
+    grid-template-columns: 1fr;
+    gap: 32px;
+  }
+
+  .app-footer__bottom {
+    margin-top: 36px;
+    flex-direction: column;
+    gap: 6px;
+  }
+}
