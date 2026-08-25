@@ -38,7 +38,12 @@
 
 .cta-section--hero {
   max-width: 760px;
+  min-height: 182px;
   margin: 34px 0 0;
+}
+
+.cta-section--hero-placeholder {
+  pointer-events: none;
 }
 
 .cta-section--hero .cta-section__title {
@@ -47,7 +52,7 @@
   letter-spacing: 0;
 }
 
-.cta-section--hero .cta-list {
+.cta-section--layout-copy-above .cta-list {
   grid-template-columns: 1fr;
 }
 
@@ -123,7 +128,7 @@
   font-size: 18px;
 }
 
-.cta-section--hero .cta-list__buttons {
+.cta-section--layout-copy-above .cta-list__buttons {
   width: 80%;
   justify-self: start;
   grid-template-columns: repeat(var(--cta-button-count), minmax(0, 1fr));
@@ -152,6 +157,7 @@
   }
 
   .cta-section--hero {
+    min-height: 254px;
     margin-top: 28px;
   }
 
@@ -170,12 +176,18 @@
     grid-template-columns: 1fr;
   }
 
-  .cta-section--hero .cta-list__buttons {
+  .cta-section--layout-copy-above .cta-list__buttons {
     width: 100%;
     grid-template-columns: 1fr;
   }
 
   .cta-button {
     width: 100%;
+  }
+}
+
+@media (max-width: 360px) {
+  .cta-section--hero {
+    min-height: 281px;
   }
 }

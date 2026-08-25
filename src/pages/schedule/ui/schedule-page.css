@@ -56,6 +56,22 @@
   line-height: 1.1;
 }
 
+.schedule-page__start > strong {
+  display: block;
+}
+
+.schedule-page__start p {
+  margin: 14px 0 0;
+  font-size: 16px;
+  font-weight: var(--on-color-font-weight);
+  line-height: 1.5;
+}
+
+.schedule-page__start a {
+  font-weight: 800;
+  text-underline-offset: 3px;
+}
+
 .schedule-teachers {
   padding-top: 88px;
 }

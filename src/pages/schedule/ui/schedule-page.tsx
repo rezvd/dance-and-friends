@@ -14,7 +14,12 @@ export function SchedulePage() {
 
       <main className="schedule-page__content">
         <aside className="schedule-page__start">
-          Старт сезона — 7 сентября 💫
+          <strong>Старт сезона — 7 сентября 💫</strong>
+          <p>
+            А актуальный график занятий и мероприятий всегда можете проверить
+            {' '}
+            <a href="/#schedule">в нашем календаре</a>
+          </p>
         </aside>
 
         <figure className="schedule-page__image">

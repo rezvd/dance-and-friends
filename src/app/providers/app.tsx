@@ -1,3 +1,5 @@
+import { useEffect } from 'react'
+
 import { ContactsPage } from '@/pages/contacts'
 import { DirectionsPage } from '@/pages/directions'
 import { HomePage } from '@/pages/home'
@@ -8,6 +10,24 @@ import { AppShell } from '@/widgets/app-shell'
 
 export function App() {
   const pathname = window.location.pathname.replace(/\/+$/, '') || '/'
+  const hash = window.location.hash
+
+  useEffect(() => {
+    if (!hash) {
+      return
+    }
+
+    const frame = window.requestAnimationFrame(() => {
+      const target = document.getElementById(
+        decodeURIComponent(hash.slice(1)),
+      )
+
+      target?.scrollIntoView({ block: 'start' })
+    })
+
+    return () => window.cancelAnimationFrame(frame)
+  }, [hash, pathname])
+
   const page =
     pathname === '/directions' ? (
       <DirectionsPage />

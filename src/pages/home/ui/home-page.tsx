@@ -209,8 +209,7 @@ export function HomePage() {
         aria-labelledby="schedule-title"
       >
         <div className="section__header">
-          <p className="section__eyebrow">Мероприятия</p>
-          <h2 id="schedule-title">Ближайшие занятия и мероприятия</h2>
+          <h2 id="schedule-title">Занятия и мероприятия</h2>
         </div>
 
         <div className="schedule-filters" aria-label="Фильтр по типу событий">

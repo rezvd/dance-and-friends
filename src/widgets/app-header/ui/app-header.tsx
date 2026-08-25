@@ -2,7 +2,6 @@ import './app-header.css'
 
 export function AppHeader() {
   const pathname = window.location.pathname.replace(/\/+$/, '') || '/'
-  const isHomePage = pathname === '/'
   const isDirectionsPage = pathname === '/directions'
   const isTeachersPage = pathname === '/teachers'
   const isPricePage = pathname === '/price'
@@ -18,7 +17,7 @@ export function AppHeader() {
           <span>FRIENDS</span>
         </a>
         <nav className="app-header__nav" aria-label="Main navigation">
-          <a href={isHomePage ? '#about' : '/#about'}>О нас</a>
+          <a href="/">О нас</a>
           <a
             href="/directions"
             aria-current={isDirectionsPage ? 'page' : undefined}

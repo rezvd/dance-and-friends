@@ -7,9 +7,6 @@ const vkGroupUrl =
   import.meta.env.VITE_VK_GROUP_URL ?? 'https://vk.com/club238903782'
 
 export function AppFooter() {
-  const pathname = window.location.pathname.replace(/\/+$/, '') || '/'
-  const isHomePage = pathname === '/'
-
   return (
     <footer className="app-footer">
       <div className="app-footer__inner">
@@ -23,7 +20,7 @@ export function AppFooter() {
         </div>
 
         <nav className="app-footer__nav" aria-label="Навигация в подвале">
-          <a href={isHomePage ? '#about' : '/#about'}>О нас</a>
+          <a href="/">О нас</a>
           <a href="/directions">Направления</a>
           <a href="/teachers">Преподаватели</a>
           <a href="/price">Стоимость</a>

@@ -70,7 +70,7 @@ export function PricePage() {
             <p className="payment__recipient">Получатель: Софья Б</p>
           </article>
 
-          <CtaSection className="payment__cta" />
+          <CtaSection className="payment__cta" layout="copy-above" />
         </section>
       </main>
     </div>
