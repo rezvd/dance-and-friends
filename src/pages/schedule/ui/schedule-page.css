@@ -56,6 +56,10 @@
   padding-top: 88px;
 }
 
+.schedule-page__cta {
+  width: 100%;
+}
+
 .schedule-teachers > h2 {
   margin: 0;
   color: var(--text);

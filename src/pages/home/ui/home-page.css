@@ -69,13 +69,6 @@
   line-height: 1.6;
 }
 
-.hero__actions {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 14px;
-  margin-top: 34px;
-}
-
 .hero__aside {
   width: min(125%, 640px);
   aspect-ratio: 1224 / 1092;
@@ -930,15 +923,6 @@
 
   .hero__lead {
     font-size: 18px;
-  }
-
-  .hero__actions {
-    width: 100%;
-    flex-direction: column;
-  }
-
-  .hero__actions .button {
-    width: 100%;
   }
 
   .hero__aside {

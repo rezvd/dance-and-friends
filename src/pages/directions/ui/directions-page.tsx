@@ -1,14 +1,15 @@
-import { useState } from 'react'
+import { useState } from "react";
 
-import balboaVideoOne from '@/assets/video/balboa_1.mp4'
-import balboaVideoTwo from '@/assets/video/balboa_2.mp4'
-import bluesVideoOne from '@/assets/video/blues_1.mp4'
-import bluesVideoTwo from '@/assets/video/blues_2.mp4'
-import lindyVideoOne from '@/assets/video/lindy_1.mp4'
-import lindyVideoTwo from '@/assets/video/lindy_2.mp4'
-import { directions } from '@/entities/project/model/school-info'
+import balboaVideoOne from "@/assets/video/balboa_1.mp4";
+import balboaVideoTwo from "@/assets/video/balboa_2.mp4";
+import bluesVideoOne from "@/assets/video/blues_1.mp4";
+import bluesVideoTwo from "@/assets/video/blues_2.mp4";
+import lindyVideoOne from "@/assets/video/lindy_1.mp4";
+import lindyVideoTwo from "@/assets/video/lindy_2.mp4";
+import { directions } from "@/entities/project/model/school-info";
+import { CtaSection } from "@/widgets/cta-list";
 
-import './directions-page.css'
+import "./directions-page.css";
 
 const directionMedia = {
   lindy: {
@@ -20,7 +21,7 @@ const directionMedia = {
   balboa: {
     videos: [balboaVideoOne, balboaVideoTwo],
   },
-} as const
+} as const;
 
 export function DirectionsPage() {
   return (
@@ -36,14 +37,14 @@ export function DirectionsPage() {
         aria-label="Танцевальные направления"
       >
         {directions.map((direction) => {
-          const media = directionMedia[direction.id]
+          const media = directionMedia[direction.id];
 
           return (
             <article className="direction-card" key={direction.id}>
-                <div className="direction-card__media">
-                  <DirectionVideoGallery
-                    title={direction.title}
-                    videos={media.videos}
+              <div className="direction-card__media">
+                <DirectionVideoGallery
+                  title={direction.title}
+                  videos={media.videos}
                 />
               </div>
               <div className="direction-card__content">
@@ -51,19 +52,23 @@ export function DirectionsPage() {
                 <p>{renderHighlightedText(direction.description)}</p>
               </div>
             </article>
-          )
+          );
         })}
       </section>
 
-      <section className="directions-start" aria-labelledby="directions-start-title">
+      <section
+        className="directions-start"
+        aria-labelledby="directions-start-title"
+      >
         <h2 id="directions-start-title">С чего начать?</h2>
         <div className="directions-start__grid">
           <article className="directions-start__card directions-start__card--accent">
-            <h3>Попробовать</h3>
+            <h3>Попробовать!</h3>
             <p>
               Приходите на пробное занятие — познакомитесь с танцами вживую и
               сможете понять, что нравится именно вам
             </p>
+            <CtaSection heading={null} variant="embedded" />
           </article>
           <article className="directions-start__card directions-start__card--strong">
             <h3>Можно не выбирать :)</h3>
@@ -76,28 +81,25 @@ export function DirectionsPage() {
         </div>
       </section>
     </div>
-  )
+  );
 }
 
 type DirectionVideoGalleryProps = {
-  title: string
-  videos: readonly string[]
-}
+  title: string;
+  videos: readonly string[];
+};
 
-function DirectionVideoGallery({
-  title,
-  videos,
-}: DirectionVideoGalleryProps) {
-  const [activeVideoIndex, setActiveVideoIndex] = useState(0)
-  const activeVideo = videos[activeVideoIndex]
+function DirectionVideoGallery({ title, videos }: DirectionVideoGalleryProps) {
+  const [activeVideoIndex, setActiveVideoIndex] = useState(0);
+  const activeVideo = videos[activeVideoIndex];
 
   const showPreviousVideo = () => {
-    setActiveVideoIndex((index) => (index - 1 + videos.length) % videos.length)
-  }
+    setActiveVideoIndex((index) => (index - 1 + videos.length) % videos.length);
+  };
 
   const showNextVideo = () => {
-    setActiveVideoIndex((index) => (index + 1) % videos.length)
-  }
+    setActiveVideoIndex((index) => (index + 1) % videos.length);
+  };
 
   return (
     <div className="video-gallery">
@@ -129,19 +131,19 @@ function DirectionVideoGallery({
         </button>
       </div>
     </div>
-  )
+  );
 }
 
 function renderHighlightedText(text: string) {
   return text.split(/(\*\*.*?\*\*)/g).map((part, index) => {
-    if (part.startsWith('**') && part.endsWith('**')) {
+    if (part.startsWith("**") && part.endsWith("**")) {
       return (
         <strong className="direction-card__highlight" key={`${part}-${index}`}>
           {part.slice(2, -2)}
         </strong>
-      )
+      );
     }
 
-    return part
-  })
+    return part;
+  });
 }

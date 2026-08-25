@@ -46,3 +46,23 @@ src/
 ```
 
 Imports use the `@/*` alias, configured in `vite.config.ts` and `tsconfig.app.json`.
+
+## CTA sheet
+
+CTA on the home page are loaded from the `cta` worksheet in the same Google
+spreadsheet as the schedule. The first row must contain these headers:
+
+| label | link | text | color | metrica |
+| --- | --- | --- | --- | --- |
+| Button label | `https://example.com` | Text next to the button | `#F2A045` | `cta_example` |
+
+- `label` and `link` are required
+- `text`, `color`, and `metrica` are optional
+- `color` accepts a CSS hex color and can override a filled button; otherwise filled buttons alternate red and orange
+- The final CTA is always transparent with a white border, so its `color` value is ignored
+- `metrica` contains the Yandex Metrica JavaScript-event goal ID, not JavaScript or JSON
+- The `link` cell must contain only a URL; keep the adjacent description in `text`
+
+For every non-empty `metrica` value, create a matching JavaScript-event goal in
+Yandex Metrica. A click sends
+`ym(109600188, 'reachGoal', metrica, { cta: { label, link } })`.

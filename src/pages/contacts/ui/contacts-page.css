@@ -39,6 +39,15 @@
   box-shadow: var(--shadow);
 }
 
+.contacts-socials__text {
+  max-width: 420px;
+  margin: 0 0 8px;
+  color: #ffffff;
+  font-size: 16px;
+  font-weight: var(--on-color-font-weight);
+  line-height: 1.55;
+}
+
 .contacts-social-card {
   width: fit-content;
   display: flex;
@@ -87,7 +96,6 @@
 }
 
 .venue__info {
-  min-height: 440px;
   padding: 36px;
   color: #ffffff;
   background: #f2a045;
@@ -152,6 +160,10 @@
 
 .venue-plan {
   padding-top: 88px;
+}
+
+.contacts-page__cta {
+  width: 100%;
 }
 
 .venue-plan > h2 {

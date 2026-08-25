@@ -1,11 +1,7 @@
-import telegramIcon from '@/assets/icons/tg.svg'
-import vkIcon from '@/assets/icons/vk.svg'
 import priceImage from '@/assets/images/price.jpg'
+import { CtaSection } from '@/widgets/cta-list'
 
 import './price-page.css'
-
-const vkGroupUrl =
-  import.meta.env.VITE_VK_GROUP_URL ?? 'https://vk.com/club238903782'
 
 export function PricePage() {
   return (
@@ -74,31 +70,7 @@ export function PricePage() {
             <p className="payment__recipient">Получатель: Софья Б</p>
           </article>
 
-          <article className="payment__questions">
-            <h2>Остались вопросы?</h2>
-            <p>
-              Если остались вопросы по оплате или занятиям — пишите нам в
-              соцсетях, с радостью ответим!
-            </p>
-            <div className="payment__socials">
-              <a href={vkGroupUrl} target="_blank" rel="noreferrer">
-                <span className="payment__social-icon" aria-hidden="true">
-                  <img src={vkIcon} alt="" />
-                </span>
-                Группа в ВК
-              </a>
-              <a
-                href="https://t.me/+v4A3_i0WPWJjMGJi"
-                target="_blank"
-                rel="noreferrer"
-              >
-                <span className="payment__social-icon" aria-hidden="true">
-                  <img src={telegramIcon} alt="" />
-                </span>
-                Канал в ТГ
-              </a>
-            </div>
-          </article>
+          <CtaSection className="payment__cta" />
         </section>
       </main>
     </div>

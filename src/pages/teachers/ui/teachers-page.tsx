@@ -3,6 +3,7 @@ import ilyaPhoto from "@/assets/teachers/ilya-ponivanov.jpg";
 import sofiaPhoto from "@/assets/teachers/sofia-bill.jpg";
 import vadimPhoto from "@/assets/teachers/vadim-ryabenko.jpg";
 import yuliaPhoto from "@/assets/teachers/yulia-nikiforova.jpg";
+import { CtaSection } from "@/widgets/cta-list";
 
 import "./teachers-page.css";
 
@@ -67,6 +68,8 @@ export function TeachersPage() {
           </article>
         ))}
       </section>
+
+      <CtaSection />
     </div>
   );
 }

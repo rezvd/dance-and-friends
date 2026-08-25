@@ -1,4 +1,5 @@
 import scheduleImage from '@/assets/images/schedule.png'
+import { CtaSection } from '@/widgets/cta-list'
 
 import './schedule-page.css'
 
@@ -65,6 +66,8 @@ export function SchedulePage() {
             </article>
           </div>
         </section>
+
+        <CtaSection className="schedule-page__cta" />
       </main>
     </div>
   )

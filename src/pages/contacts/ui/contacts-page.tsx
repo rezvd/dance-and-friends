@@ -1,6 +1,7 @@
 import telegramIcon from '@/assets/icons/tg.svg'
 import vkIcon from '@/assets/icons/vk.svg'
 import planImage from '@/assets/images/plan.jpg'
+import { CtaSection } from '@/widgets/cta-list'
 
 import './contacts-page.css'
 
@@ -20,6 +21,10 @@ export function ContactsPage() {
         <section className="venue" aria-labelledby="venue-title">
           <div className="venue__details">
             <div className="contacts-socials" aria-label="Социальные сети">
+              <p className="contacts-socials__text">
+                Если остались вопросы — пишите нам в соцсетях, с радостью
+                ответим!
+              </p>
               <a
                 className="contacts-social-card"
                 href={vkGroupUrl}
@@ -92,6 +97,8 @@ export function ContactsPage() {
             </figure>
           </div>
         </section>
+
+        <CtaSection className="contacts-page__cta" />
       </main>
     </div>
   )

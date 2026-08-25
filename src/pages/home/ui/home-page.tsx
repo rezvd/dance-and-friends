@@ -10,10 +10,10 @@ import {
   type ScheduleEvent,
 } from "@/entities/project/model/school-info";
 import { fetchScheduleEvents } from "@/entities/project/model/sheets";
-import { Button } from "@/shared/ui/button";
 import telegramIcon from "@/assets/icons/tg.svg";
 import vkIcon from "@/assets/icons/vk.svg";
 import dancersImage from "@/assets/images/dancers.png";
+import { CtaSection } from "@/widgets/cta-list";
 
 import "./home-page.css";
 
@@ -114,18 +114,7 @@ export function HomePage() {
             Линди хоп, блюз и бальбоа для тех, кто хочет чаще танцевать,
             знакомиться и проводить время в тёплом комьюнити
           </p>
-          <div className="hero__actions">
-            <Button type="button" onClick={() => scrollToSection("contacts")}>
-              Написать нам
-            </Button>
-            <Button
-              type="button"
-              variant="secondary"
-              onClick={openDirectionsPage}
-            >
-              Смотреть направления
-            </Button>
-          </div>
+          <CtaSection variant="hero" />
         </div>
         <div className="hero__aside" aria-hidden="true">
           <img className="hero__dancers" src={dancersImage} alt="" />
@@ -397,6 +386,8 @@ export function HomePage() {
         ) : null}
       </section>
 
+      <CtaSection />
+
       <section className="contacts" id="contacts" aria-label="Контакты">
         <div className="contacts__intro">
           <p className="section__eyebrow">Контакты</p>
@@ -454,16 +445,6 @@ export function HomePage() {
   );
 }
 
-function scrollToSection(id: string) {
-  document
-    .getElementById(id)
-    ?.scrollIntoView({ behavior: "smooth", block: "start" });
-}
-
 function scrollToTop() {
   window.scrollTo({ top: 0, behavior: "smooth" });
-}
-
-function openDirectionsPage() {
-  window.location.assign("/directions");
 }
