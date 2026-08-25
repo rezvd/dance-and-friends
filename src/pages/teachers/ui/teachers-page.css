@@ -4,16 +4,16 @@
 }
 
 .teachers-page__hero {
-  padding: 72px 24px 80px;
+  padding: 72px 0 80px;
   color: #ffffff;
   background: var(--accent-strong);
   font-weight: var(--on-color-font-weight);
 }
 
-.teachers-page__hero-inner,
-.teachers-page__grid {
-  width: min(1280px, 100%);
+.teachers-page__hero-inner {
+  width: min(1180px, 100%);
   margin: 0 auto;
+  padding: 0 24px;
 }
 
 .teachers-page h1 {
@@ -26,6 +26,7 @@
 
 .teachers-page__grid {
   width: min(1080px, 100%);
+  margin: 0 auto;
   padding: 72px 24px 0;
   display: flex;
   flex-wrap: wrap;
@@ -46,7 +47,7 @@
 }
 
 .teacher-card__photo {
-  aspect-ratio: 4 / 5;
+  aspect-ratio: 5 / 4;
   overflow: hidden;
   display: grid;
   place-items: center;
@@ -111,13 +112,19 @@
   }
 }
 
+@media (max-width: 760px) {
+  .teachers-page__hero-inner {
+    padding: 0 16px;
+  }
+}
+
 @media (max-width: 640px) {
   .teachers-page {
     padding-bottom: 64px;
   }
 
   .teachers-page__hero {
-    padding: 36px 16px 56px;
+    padding: 36px 0 56px;
   }
 
   .teachers-page__grid {

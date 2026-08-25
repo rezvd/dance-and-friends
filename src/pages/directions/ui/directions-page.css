@@ -4,16 +4,16 @@
 }
 
 .directions-page__hero {
-  padding: 72px 24px 80px;
+  padding: 72px 0 80px;
   color: #ffffff;
   background: var(--accent);
   font-weight: var(--on-color-font-weight);
 }
 
-.directions-page__hero-inner,
-.directions-page__list {
-  width: min(1280px, 100%);
+.directions-page__hero-inner {
+  width: min(1180px, 100%);
   margin: 0 auto;
+  padding: 0 24px;
 }
 
 .directions-page h1 {
@@ -28,6 +28,7 @@
   display: grid;
   grid-auto-rows: 1fr;
   width: min(1088px, 100%);
+  margin: 0 auto;
   gap: 27px;
   padding: 61px 24px 0;
 }
@@ -255,7 +256,11 @@
   }
 
   .directions-page__hero {
-    padding: 36px 16px 56px;
+    padding: 36px 0 56px;
+  }
+
+  .directions-page__hero-inner {
+    padding: 0 16px;
   }
 
   .directions-page__list {

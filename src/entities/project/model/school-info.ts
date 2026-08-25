@@ -1,3 +1,5 @@
+import type { CtaButton } from '@/entities/project/model/cta'
+
 export type DanceDirection = {
   id: 'lindy' | 'blues' | 'balboa'
   title: string
@@ -5,11 +7,13 @@ export type DanceDirection = {
 }
 
 export type ScheduleEvent = {
+  id: string
   date: string
   time: string
   title: string
-  description: string
+  text: string
   type: EventType
+  buttons: CtaButton[]
 }
 
 export type EventType = 'class' | 'event'
@@ -65,10 +69,20 @@ export const directions: DanceDirection[] = [
 
 const monthFormatter = new Intl.DateTimeFormat('ru-RU', {
   month: 'long',
+  timeZone: 'UTC',
   year: 'numeric',
 })
 
-const weekdayFormatter = new Intl.DateTimeFormat('ru-RU', { weekday: 'short' })
+const weekdayFormatter = new Intl.DateTimeFormat('ru-RU', {
+  timeZone: 'UTC',
+  weekday: 'short',
+})
+const omskDateFormatter = new Intl.DateTimeFormat('en-CA', {
+  day: '2-digit',
+  month: '2-digit',
+  timeZone: 'Asia/Omsk',
+  year: 'numeric',
+})
 
 export function getMonthTitleFromDate(date: Date) {
   const formatted = monthFormatter.format(date)
@@ -80,50 +94,47 @@ export function getWeekday(dateString: string) {
 }
 
 export function getDayNumber(dateString: string) {
-  return parseIsoDate(dateString).getDate()
-}
-
-export function parseSheetDate(value: string) {
-  const [day, month, year] = value.split('-').map(Number)
-  return new Date(year, month - 1, day)
+  return parseIsoDate(dateString).getUTCDate()
 }
 
 export function parseIsoDate(value: string) {
   const [year, month, day] = value.split('-').map(Number)
-  return new Date(year, month - 1, day)
+  return new Date(Date.UTC(year, month - 1, day))
 }
 
-export function toIsoDate(value: string) {
-  const date = parseSheetDate(value)
-  const year = date.getFullYear()
-  const month = String(date.getMonth() + 1).padStart(2, '0')
-  const day = String(date.getDate()).padStart(2, '0')
-  return `${year}-${month}-${day}`
-}
+function getOmskToday() {
+  const parts = omskDateFormatter.formatToParts(new Date())
+  const year = Number(parts.find((part) => part.type === 'year')?.value)
+  const month = Number(parts.find((part) => part.type === 'month')?.value)
+  const day = Number(parts.find((part) => part.type === 'day')?.value)
 
-export function buildTimeLabel(start: string, end?: string) {
-  return end ? `${start}-${end}` : start
+  return new Date(Date.UTC(year, month - 1, day))
 }
 
 export function parseEventType(value: string): EventType {
   const normalized = value.trim().toLowerCase()
 
-  if (normalized === 'занятие') {
+  if (normalized === 'занятие' || normalized === 'class') {
     return 'class'
   }
 
   return 'event'
 }
 
-export function buildCalendarMonths(events: ScheduleEvent[], today = new Date()): CalendarMonth[] {
-  const currentMonthStart = new Date(today.getFullYear(), today.getMonth(), 1)
+export function buildCalendarMonths(
+  events: ScheduleEvent[],
+  today = getOmskToday(),
+): CalendarMonth[] {
+  const currentMonthStart = new Date(
+    Date.UTC(today.getUTCFullYear(), today.getUTCMonth(), 1),
+  )
 
   const upcomingEvents = events.filter((event) => parseIsoDate(event.date) >= currentMonthStart)
   const grouped = new Map<string, ScheduleEvent[]>()
 
   for (const event of upcomingEvents) {
     const date = parseIsoDate(event.date)
-    const key = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}`
+    const key = `${date.getUTCFullYear()}-${String(date.getUTCMonth() + 1).padStart(2, '0')}`
     const group = grouped.get(key)
     if (group) {
       group.push(event)
@@ -132,12 +143,17 @@ export function buildCalendarMonths(events: ScheduleEvent[], today = new Date())
     }
   }
 
+  if (grouped.size === 0) {
+    const currentMonthKey = `${currentMonthStart.getUTCFullYear()}-${String(currentMonthStart.getUTCMonth() + 1).padStart(2, '0')}`
+    grouped.set(currentMonthKey, [])
+  }
+
   return Array.from(grouped.entries()).map(([key, monthEvents]) => {
-    const sampleDate = parseIsoDate(monthEvents[0].date)
-    const year = sampleDate.getFullYear()
-    const month = sampleDate.getMonth()
-    const totalDays = new Date(year, month + 1, 0).getDate()
-    const offset = (new Date(year, month, 1).getDay() + 6) % 7
+    const sampleDate = parseIsoDate(`${key}-01`)
+    const year = sampleDate.getUTCFullYear()
+    const month = sampleDate.getUTCMonth()
+    const totalDays = new Date(Date.UTC(year, month + 1, 0)).getUTCDate()
+    const offset = (new Date(Date.UTC(year, month, 1)).getUTCDay() + 6) % 7
 
     return {
       key,
@@ -147,7 +163,9 @@ export function buildCalendarMonths(events: ScheduleEvent[], today = new Date())
         const day = index + 1
         return {
           day,
-          events: monthEvents.filter((event) => parseIsoDate(event.date).getDate() === day),
+          events: monthEvents.filter(
+            (event) => parseIsoDate(event.date).getUTCDate() === day,
+          ),
         }
       }),
       events: monthEvents,
@@ -157,24 +175,30 @@ export function buildCalendarMonths(events: ScheduleEvent[], today = new Date())
 
 const shortMonthFormatter = new Intl.DateTimeFormat('ru-RU', {
   month: 'short',
+  timeZone: 'UTC',
 })
 
 export function startOfWeek(date: Date) {
-  const normalized = new Date(date.getFullYear(), date.getMonth(), date.getDate())
-  const day = normalized.getDay()
+  const normalized = new Date(
+    Date.UTC(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate()),
+  )
+  const day = normalized.getUTCDay()
   const diff = day === 0 ? -6 : 1 - day
-  normalized.setDate(normalized.getDate() + diff)
+  normalized.setUTCDate(normalized.getUTCDate() + diff)
   return normalized
 }
 
-export function buildCalendarWeeks(events: ScheduleEvent[], today = new Date()): CalendarWeek[] {
+export function buildCalendarWeeks(
+  events: ScheduleEvent[],
+  today = getOmskToday(),
+): CalendarWeek[] {
   const currentWeekStart = startOfWeek(today)
   const upcomingEvents = events.filter((event) => parseIsoDate(event.date) >= currentWeekStart)
   const grouped = new Map<string, ScheduleEvent[]>()
 
   for (const event of upcomingEvents) {
-    const blockStart = startOfTwoWeekBlock(parseIsoDate(event.date), currentWeekStart)
-    const key = toDateKey(blockStart)
+    const weekStart = startOfWeek(parseIsoDate(event.date))
+    const key = toDateKey(weekStart)
     const group = grouped.get(key)
 
     if (group) {
@@ -184,48 +208,45 @@ export function buildCalendarWeeks(events: ScheduleEvent[], today = new Date()):
     }
   }
 
+  if (grouped.size === 0) {
+    grouped.set(toDateKey(currentWeekStart), [])
+  }
+
   return Array.from(grouped.entries()).map(([key, weekEvents]) => {
     const weekStart = parseIsoDate(key)
     const weekEnd = new Date(
-      weekStart.getFullYear(),
-      weekStart.getMonth(),
-      weekStart.getDate() + 13,
+      Date.UTC(
+        weekStart.getUTCFullYear(),
+        weekStart.getUTCMonth(),
+        weekStart.getUTCDate() + 6,
+      ),
     )
 
     return {
       key,
-      title: `${weekStart.getDate()}-${weekEnd.getDate()} ${formatWeekMonthLabel(weekStart, weekEnd)}`,
+      title: formatWeekTitle(weekStart, weekEnd),
       events: weekEvents,
     }
   })
 }
 
-function formatWeekMonthLabel(weekStart: Date, weekEnd: Date) {
-  if (weekStart.getMonth() === weekEnd.getMonth()) {
-    return shortMonthFormatter.format(weekStart).replace('.', '')
+function formatWeekTitle(weekStart: Date, weekEnd: Date) {
+  const startMonth = shortMonthFormatter.format(weekStart).replace('.', '')
+  const endMonth = shortMonthFormatter.format(weekEnd).replace('.', '')
+
+  if (
+    weekStart.getUTCFullYear() === weekEnd.getUTCFullYear() &&
+    weekStart.getUTCMonth() === weekEnd.getUTCMonth()
+  ) {
+    return `${weekStart.getUTCDate()}–${weekEnd.getUTCDate()} ${startMonth}`
   }
 
-  return `${shortMonthFormatter.format(weekStart).replace('.', '')} — ${shortMonthFormatter
-    .format(weekEnd)
-    .replace('.', '')}`
+  return `${weekStart.getUTCDate()} ${startMonth} — ${weekEnd.getUTCDate()} ${endMonth}`
 }
 
 function toDateKey(date: Date) {
-  const year = date.getFullYear()
-  const month = String(date.getMonth() + 1).padStart(2, '0')
-  const day = String(date.getDate()).padStart(2, '0')
+  const year = date.getUTCFullYear()
+  const month = String(date.getUTCMonth() + 1).padStart(2, '0')
+  const day = String(date.getUTCDate()).padStart(2, '0')
   return `${year}-${month}-${day}`
-}
-
-function startOfTwoWeekBlock(date: Date, currentWeekStart: Date) {
-  const weekStart = startOfWeek(date)
-  const diffDays = Math.floor(
-    (weekStart.getTime() - currentWeekStart.getTime()) / (1000 * 60 * 60 * 24),
-  )
-  const blockOffset = Math.floor(diffDays / 14) * 14
-  return new Date(
-    currentWeekStart.getFullYear(),
-    currentWeekStart.getMonth(),
-    currentWeekStart.getDate() + blockOffset,
-  )
 }

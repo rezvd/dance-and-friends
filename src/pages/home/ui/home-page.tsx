@@ -1,15 +1,18 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, type CSSProperties } from "react";
 
+import type { CtaButton } from "@/entities/project/model/cta";
+import { fetchCalendarEvents } from "@/entities/project/model/calendar";
 import {
   buildCalendarWeeks,
   buildCalendarMonths,
   eventTypeOptions,
   getDayNumber,
   getWeekday,
+  parseIsoDate,
   type EventType,
   type ScheduleEvent,
 } from "@/entities/project/model/school-info";
-import { fetchScheduleEvents } from "@/entities/project/model/sheets";
+import { trackCtaGoal } from "@/shared/lib/metrica";
 import telegramIcon from "@/assets/icons/tg.svg";
 import vkIcon from "@/assets/icons/vk.svg";
 import dancersImage from "@/assets/images/dancers.png";
@@ -18,6 +21,12 @@ import { CtaSection } from "@/widgets/cta-list";
 import "./home-page.css";
 
 const weekdays = ["Пн", "Вт", "Ср", "Чт", "Пт", "Сб", "Вс"];
+const mobileWeeksPageSize = 6;
+const eventDateFormatter = new Intl.DateTimeFormat("ru-RU", {
+  day: "numeric",
+  month: "long",
+  timeZone: "UTC",
+});
 const vkGroupUrl =
   import.meta.env.VITE_VK_GROUP_URL ?? "https://vk.com/club238903782";
 
@@ -28,6 +37,8 @@ export function HomePage() {
   const [openMobileWeekKey, setOpenMobileWeekKey] = useState<string | null>(
     null,
   );
+  const [visibleMobileWeekCount, setVisibleMobileWeekCount] =
+    useState(mobileWeeksPageSize);
   const [isScrollTopVisible, setIsScrollTopVisible] = useState(false);
   const [status, setStatus] = useState<"loading" | "ready" | "error">(
     "loading",
@@ -37,7 +48,7 @@ export function HomePage() {
   useEffect(() => {
     let cancelled = false;
 
-    fetchScheduleEvents()
+    fetchCalendarEvents()
       .then((nextEvents) => {
         if (cancelled) {
           return;
@@ -71,6 +82,7 @@ export function HomePage() {
       : events.filter((event) => event.type === selectedType);
   const months = buildCalendarMonths(filteredEvents);
   const weeks = buildCalendarWeeks(filteredEvents);
+  const visibleMobileWeeks = weeks.slice(0, visibleMobileWeekCount);
   const visibleMobileWeekKey = openMobileWeekKey ?? weeks[0]?.key ?? "";
 
   useEffect(() => {
@@ -94,6 +106,7 @@ export function HomePage() {
     setSelectedType(nextType);
     setActiveMonthIndex(0);
     setOpenMobileWeekKey(null);
+    setVisibleMobileWeekCount(mobileWeeksPageSize);
   };
 
   return (
@@ -162,10 +175,7 @@ export function HomePage() {
         <section className="about-more" aria-labelledby="about-more-title">
           <h2 id="about-more-title">Направления и преподаватели</h2>
           <nav className="about-links" aria-label="Подробнее о Dance&Friends">
-            <a
-              className="about-link about-link--directions"
-              href="/directions"
-            >
+            <a className="about-link about-link--directions" href="/directions">
               <span className="about-link__copy">
                 <strong>Направления</strong>
                 <span>
@@ -201,10 +211,6 @@ export function HomePage() {
         <div className="section__header">
           <p className="section__eyebrow">Мероприятия</p>
           <h2 id="schedule-title">Ближайшие занятия и мероприятия</h2>
-          <p>
-            Фильтруйте занятия и мероприятия. На мобильных показываем расписание
-            блоками по две недели
-          </p>
         </div>
 
         <div className="schedule-filters" aria-label="Фильтр по типу событий">
@@ -225,20 +231,18 @@ export function HomePage() {
         </div>
 
         {status === "loading" ? (
-          <div className="schedule-state" role="status">
-            Загружаем мероприятия из Google Sheets
+          <div
+            className="schedule-state schedule-state--loading"
+            role="status"
+            aria-label="Загружаем мероприятия"
+          >
+            <span className="schedule-loader" aria-hidden="true" />
           </div>
         ) : null}
 
         {status === "error" ? (
           <div className="schedule-state schedule-state--error" role="alert">
             {errorMessage}
-          </div>
-        ) : null}
-
-        {status === "ready" && months.length === 0 ? (
-          <div className="schedule-state" role="status">
-            В таблице пока нет ближайших мероприятий
           </div>
         ) : null}
 
@@ -303,31 +307,49 @@ export function HomePage() {
                           : "calendar-day"
                       }
                       key={`${activeMonth.key}-${day.day}`}
-                      tabIndex={day.events.length > 0 ? 0 : undefined}
                     >
                       <span className="calendar-day__number">{day.day}</span>
                       {day.events.map((event) => (
-                        <span
-                          className={`calendar-day__event calendar-day__event--${event.type}`}
-                          key={event.title + event.time}
+                        <div
+                          className={`calendar-day__event calendar-day__event--${event.type} calendar-day__event--accent-${getCalendarEventAccent(event)}`}
+                          key={event.id}
+                          tabIndex={hasEventDetails(event) ? 0 : undefined}
                         >
                           <span className="calendar-day__label">
-                            <strong>{event.time}</strong>
-                            <span className="calendar-day__title">
+                            <strong>{getEventStartTime(event.time)}</strong>
+                            <span
+                              className="calendar-day__title"
+                              title={event.title}
+                            >
                               {event.title}
                             </span>
                           </span>
-                          <span
-                            className={`calendar-day__tooltip calendar-day__tooltip--${event.type}`}
-                            role="tooltip"
-                          >
-                            {event.title}
-                            <small>{event.description}</small>
-                          </span>
-                        </span>
+                          {hasEventDetails(event) ? (
+                            <EventDetails
+                              className={`calendar-day__popover calendar-day__popover--${event.type}`}
+                              event={event}
+                              showDateTime
+                            />
+                          ) : null}
+                        </div>
                       ))}
                     </div>
                   ))}
+                  {Array.from(
+                    {
+                      length:
+                        (7 -
+                          ((activeMonth.offset + activeMonth.days.length) %
+                            7)) %
+                        7,
+                    },
+                    (_, index) => (
+                      <span
+                        className="calendar-day calendar-day--empty"
+                        key={`${activeMonth.key}-trailing-empty-${index}`}
+                      />
+                    ),
+                  )}
                 </div>
               </article>
             </div>
@@ -336,7 +358,7 @@ export function HomePage() {
               className="mobile-schedule"
               aria-label="Список событий Dance&Friends"
             >
-              {weeks.map((week) => (
+              {visibleMobileWeeks.map((week) => (
                 <article
                   className={
                     week.key === visibleMobileWeekKey
@@ -360,27 +382,47 @@ export function HomePage() {
                       ›
                     </span>
                   </button>
-                  <div className="mobile-schedule__events">
-                    {week.events.map((event) => (
-                      <article
-                        className={`mobile-schedule__event mobile-schedule__event--${event.type}`}
-                        key={`${event.date}-${event.time}-${event.title}`}
-                      >
-                        <time dateTime={event.date}>
-                          <strong>{getDayNumber(event.date)}</strong>
-                          <span>{getWeekday(event.date)}</span>
-                        </time>
-                        <div>
-                          <p>
-                            <strong>{event.time}</strong> {event.title}
-                          </p>
-                          <small>{event.description}</small>
-                        </div>
-                      </article>
-                    ))}
-                  </div>
+                  {week.key === visibleMobileWeekKey ? (
+                    <div className="mobile-schedule__events">
+                      {week.events.map((event) => {
+                        const hasDetails = hasEventDetails(event);
+                        const className = `mobile-schedule__event mobile-schedule__event--${event.type}`;
+
+                        return hasDetails ? (
+                          <details className={className} key={event.id}>
+                            <summary className="mobile-schedule__event-summary">
+                              <MobileEventSummary event={event} showMore />
+                            </summary>
+                            <EventDetails
+                              className="mobile-schedule__details"
+                              event={event}
+                            />
+                          </details>
+                        ) : (
+                          <article className={className} key={event.id}>
+                            <div className="mobile-schedule__event-summary">
+                              <MobileEventSummary event={event} />
+                            </div>
+                          </article>
+                        );
+                      })}
+                    </div>
+                  ) : null}
                 </article>
               ))}
+              {visibleMobileWeeks.length < weeks.length ? (
+                <button
+                  className="mobile-schedule__load-more"
+                  type="button"
+                  onClick={() =>
+                    setVisibleMobileWeekCount(
+                      (count) => count + mobileWeeksPageSize,
+                    )
+                  }
+                >
+                  Загрузить ещё
+                </button>
+              ) : null}
             </div>
           </>
         ) : null}
@@ -447,4 +489,146 @@ export function HomePage() {
 
 function scrollToTop() {
   window.scrollTo({ top: 0, behavior: "smooth" });
+}
+
+type EventButtonStyle = CSSProperties & {
+  "--event-button-color"?: string;
+};
+
+function hasEventDetails(event: ScheduleEvent) {
+  return Boolean(event.text || event.buttons.length);
+}
+
+function getEventStartTime(time: string) {
+  return time.split("–", 1)[0];
+}
+
+function getCalendarEventAccent(event: ScheduleEvent) {
+  if (event.type === "event") {
+    return "event";
+  }
+
+  const title = event.title.toLocaleLowerCase("ru-RU").replaceAll("ё", "е");
+
+  if (title.includes("линди") || title.includes("lindy")) {
+    return "lindy";
+  }
+
+  if (title.includes("блюз") || title.includes("blues")) {
+    return "blues";
+  }
+
+  if (title.includes("бальбоа") || title.includes("balboa")) {
+    return "balboa";
+  }
+
+  return "class";
+}
+
+function MobileEventSummary({
+  event,
+  showMore = false,
+}: {
+  event: ScheduleEvent;
+  showMore?: boolean;
+}) {
+  return (
+    <>
+      <time dateTime={event.date}>
+        <strong>{getDayNumber(event.date)}</strong>
+        <span>{getWeekday(event.date)}</span>
+      </time>
+      <span className="mobile-schedule__event-copy">
+        <span className="mobile-schedule__event-title">
+          <strong>{event.time}</strong> {event.title}
+        </span>
+        {showMore ? (
+          <span className="mobile-schedule__event-more">Подробнее</span>
+        ) : null}
+      </span>
+    </>
+  );
+}
+
+function EventDetails({
+  className,
+  event,
+  showDateTime = false,
+}: {
+  className: string;
+  event: ScheduleEvent;
+  showDateTime?: boolean;
+}) {
+  return (
+    <div
+      aria-label={`Подробности: ${event.title}`}
+      className={`event-details ${className}`}
+      role="region"
+    >
+      {showDateTime ? (
+        <p className="event-details__datetime">
+          <strong>
+            {eventDateFormatter.format(parseIsoDate(event.date))}, {event.time}
+          </strong>
+        </p>
+      ) : null}
+      {event.text ? (
+        <p className="event-details__text">
+          {renderEventText(event.text, event.type)}
+        </p>
+      ) : null}
+      {event.buttons.length > 0 ? (
+        <div className="event-details__actions">
+          {event.buttons.map((button) => (
+            <EventButton
+              button={button}
+              key={`${button.label}-${button.link}`}
+            />
+          ))}
+        </div>
+      ) : null}
+    </div>
+  );
+}
+
+function EventButton({ button }: { button: CtaButton }) {
+  const isExternalLink = /^https?:\/\//i.test(button.link);
+  const style: EventButtonStyle | undefined = button.color
+    ? { "--event-button-color": button.color }
+    : undefined;
+
+  return (
+    <a
+      className="event-details__button"
+      href={button.link}
+      onClick={() => trackCtaGoal(button)}
+      rel={isExternalLink ? "noreferrer" : undefined}
+      style={style}
+      target={isExternalLink ? "_blank" : undefined}
+    >
+      {button.label}
+    </a>
+  );
+}
+
+function renderEventText(text: string, type: EventType) {
+  return text.split(/(\*\*[^*\n]+\*\*|\*[^*\n]+\*)/g).map((part, index) => {
+    const isDoubleBold = part.startsWith("**") && part.endsWith("**");
+    const isBold = isDoubleBold || (part.startsWith("*") && part.endsWith("*"));
+
+    if (!isBold) {
+      return part;
+    }
+
+    const edgeLength = isDoubleBold ? 2 : 1;
+
+    return (
+      <strong
+        className={`event-details__highlight event-details__highlight--${type}`}
+        key={`${part}-${index}`}
+      >
+        {part.slice(edgeLength, -edgeLength)}
+      </strong>
+    );
+  });
 }

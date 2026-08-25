@@ -1,4 +1,4 @@
-import type { CtaItem } from '@/entities/project/model/cta'
+import type { CtaButton } from '@/entities/project/model/cta'
 
 const metricaCounterId = 109600188
 
@@ -8,7 +8,7 @@ declare global {
   }
 }
 
-export function trackCtaGoal(cta: CtaItem) {
+export function trackCtaGoal(cta: CtaButton) {
   if (!cta.metrica || typeof window.ym !== 'function') {
     return
   }

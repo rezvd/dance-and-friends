@@ -4,13 +4,18 @@
 }
 
 .price-page__hero {
-  padding: 72px 24px 80px;
+  padding: 72px 0 80px;
   color: #ffffff;
   background: #f2a045;
   font-weight: var(--on-color-font-weight);
 }
 
-.price-page__hero-inner,
+.price-page__hero-inner {
+  width: min(1180px, 100%);
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
 .price-page__content {
   width: min(1120px, 100%);
   margin: 0 auto;
@@ -169,7 +174,11 @@
   }
 
   .price-page__hero {
-    padding: 36px 16px 56px;
+    padding: 36px 0 56px;
+  }
+
+  .price-page__hero-inner {
+    padding: 0 16px;
   }
 
   .price-page__content {

@@ -4,7 +4,7 @@
 }
 
 .schedule-page__hero {
-  padding: 72px 24px 80px;
+  padding: 72px 0 80px;
   color: #ffffff;
   background: var(--accent);
   font-weight: var(--on-color-font-weight);
@@ -14,6 +14,10 @@
 .schedule-page__content {
   width: min(1180px, 100%);
   margin: 0 auto;
+}
+
+.schedule-page__hero-inner {
+  padding: 0 24px;
 }
 
 .schedule-page h1 {
@@ -145,7 +149,11 @@
   }
 
   .schedule-page__hero {
-    padding: 36px 16px 56px;
+    padding: 36px 0 56px;
+  }
+
+  .schedule-page__hero-inner {
+    padding: 0 16px;
   }
 
   .schedule-page__content {
