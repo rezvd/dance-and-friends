@@ -168,6 +168,10 @@
   margin: 0;
 }
 
+.payment__cta .cta-list__buttons {
+  width: 100%;
+}
+
 @media (max-width: 760px) {
   .price-page {
     padding-bottom: 64px;

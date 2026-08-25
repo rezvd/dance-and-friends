@@ -68,7 +68,12 @@ export function DirectionsPage() {
               Приходите на пробное занятие — познакомитесь с танцами вживую и
               сможете понять, что нравится именно вам
             </p>
-            <CtaSection heading={null} variant="embedded" />
+            <CtaSection
+              className="directions-start__cta"
+              heading={null}
+              layout="copy-above"
+              variant="embedded"
+            />
           </article>
           <article className="directions-start__card directions-start__card--strong">
             <h3>Можно не выбирать :)</h3>

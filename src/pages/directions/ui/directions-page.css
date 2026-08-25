@@ -225,6 +225,10 @@
   color: rgba(255, 255, 255, 0.9);
 }
 
+.directions-start__cta .cta-list__buttons {
+  width: 100%;
+}
+
 @media (max-width: 980px) {
   .direction-card {
     grid-template-columns: 1fr;

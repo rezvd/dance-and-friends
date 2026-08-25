@@ -1,5 +1,6 @@
 .app-shell {
   min-height: 100vh;
+  padding-top: 73px;
   display: flex;
   flex-direction: column;
 }
@@ -9,4 +10,10 @@
   margin: 0 auto;
   padding: 0;
   flex: 1;
+}
+
+@media (max-width: 760px) {
+  .app-shell {
+    padding-top: 65px;
+  }
 }
