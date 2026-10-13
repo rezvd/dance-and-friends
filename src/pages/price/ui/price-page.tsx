@@ -16,7 +16,7 @@ export function PricePage() {
         <figure className="price-page__price-list">
           <img
             src={priceImage}
-            alt="Пробное занятие — 250 рублей, разовое занятие — 600 рублей, абонемент на 4 занятия — 2100 рублей, на 8 занятий — 3600 рублей, на 16 занятий — 5800 рублей"
+            alt="Стоимость занятий и абонементов Dance&Friends"
           />
         </figure>
 

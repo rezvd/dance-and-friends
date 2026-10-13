@@ -80,6 +80,19 @@
   filter: brightness(0) invert(1);
 }
 
+.contacts-socials__phone {
+  display: grid;
+  gap: 6px;
+  margin-top: 12px;
+  color: #ffffff;
+  font-weight: var(--on-color-font-weight);
+  text-decoration: none;
+}
+
+.contacts-socials__phone strong {
+  font-size: 20px;
+}
+
 .venue {
   display: grid;
   grid-template-columns: minmax(320px, 0.8fr) minmax(0, 1.2fr);

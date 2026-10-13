@@ -1,10 +1,8 @@
 import telegramIcon from '@/assets/icons/tg.svg'
 import vkIcon from '@/assets/icons/vk.svg'
+import { schoolContacts } from '@/entities/project/model/contacts'
 
 import './app-footer.css'
-
-const vkGroupUrl =
-  import.meta.env.VITE_VK_GROUP_URL ?? 'https://vk.com/club238903782'
 
 export function AppFooter() {
   return (
@@ -31,7 +29,7 @@ export function AppFooter() {
         <div className="app-footer__socials">
           <a
             className="app-footer__social"
-            href={vkGroupUrl}
+            href={schoolContacts.vkUrl}
             target="_blank"
             rel="noreferrer"
           >
@@ -42,7 +40,7 @@ export function AppFooter() {
           </a>
           <a
             className="app-footer__social"
-            href="https://t.me/+v4A3_i0WPWJjMGJi"
+            href={schoolContacts.telegramUrl}
             target="_blank"
             rel="noreferrer"
           >
@@ -50,6 +48,12 @@ export function AppFooter() {
               <img src={telegramIcon} alt="" />
             </span>
             <span>Канал в ТГ</span>
+          </a>
+          <span className="app-footer__social">
+            {schoolContacts.socialHandle}
+          </span>
+          <a className="app-footer__social" href={schoolContacts.phoneUrl}>
+            {schoolContacts.phoneLabel}
           </a>
         </div>
       </div>

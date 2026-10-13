@@ -1,12 +1,10 @@
 import telegramIcon from '@/assets/icons/tg.svg'
 import vkIcon from '@/assets/icons/vk.svg'
 import planImage from '@/assets/images/plan.jpg'
+import { schoolContacts } from '@/entities/project/model/contacts'
 import { CtaSection } from '@/widgets/cta-list'
 
 import './contacts-page.css'
-
-const vkGroupUrl =
-  import.meta.env.VITE_VK_GROUP_URL ?? 'https://vk.com/club238903782'
 
 export function ContactsPage() {
   return (
@@ -20,14 +18,14 @@ export function ContactsPage() {
       <main className="contacts-page__content">
         <section className="venue" aria-labelledby="venue-title">
           <div className="venue__details">
-            <div className="contacts-socials" aria-label="Социальные сети">
+            <div className="contacts-socials" aria-label="Контакты студии">
               <p className="contacts-socials__text">
                 Если остались вопросы — пишите нам в соцсетях, с радостью
                 ответим!
               </p>
               <a
                 className="contacts-social-card"
-                href={vkGroupUrl}
+                href={schoolContacts.vkUrl}
                 target="_blank"
                 rel="noreferrer"
               >
@@ -41,7 +39,7 @@ export function ContactsPage() {
               </a>
               <a
                 className="contacts-social-card"
-                href="https://t.me/+v4A3_i0WPWJjMGJi"
+                href={schoolContacts.telegramUrl}
                 target="_blank"
                 rel="noreferrer"
               >
@@ -52,6 +50,13 @@ export function ContactsPage() {
                   <img src={telegramIcon} alt="" />
                 </span>
                 <span>Канал в ТГ</span>
+              </a>
+              <span className="contacts-social-card">
+                {schoolContacts.socialHandle}
+              </span>
+              <a className="contacts-socials__phone" href={schoolContacts.phoneUrl}>
+                <span>Телефон студии</span>
+                <strong>{schoolContacts.phoneLabel}</strong>
               </a>
             </div>
 

@@ -1,4 +1,5 @@
-import scheduleImage from '@/assets/images/schedule.png'
+import scheduleImage from '@/assets/images/schedule.jpg'
+import scheduleIntro from '@/entities/project/model/schedule-intro.json'
 import { CtaSection } from '@/widgets/cta-list'
 
 import './schedule-page.css'
@@ -13,19 +14,17 @@ export function SchedulePage() {
       </header>
 
       <main className="schedule-page__content">
-        <aside className="schedule-page__start">
-          <strong>Старт сезона — 7 сентября 💫</strong>
-          <p>
-            А актуальный график занятий и мероприятий всегда можете проверить
-            {' '}
-            <a href="/#schedule">в нашем календаре</a>
-          </p>
-        </aside>
+        {scheduleIntro.html && (
+          <aside
+            className="schedule-page__start"
+            dangerouslySetInnerHTML={{ __html: scheduleIntro.html }}
+          />
+        )}
 
         <figure className="schedule-page__image">
           <img
             src={scheduleImage}
-            alt="Расписание занятий с понедельника по пятницу: линди-хоп в 19:00, блюз в 20:00, бальбоа в 18:00, 19:00 и 20:00"
+            alt="Расписание занятий Dance&Friends"
           />
         </figure>
 

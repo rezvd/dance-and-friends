@@ -1006,6 +1006,11 @@ summary.mobile-schedule__event-summary {
   gap: 8px;
 }
 
+.contact-card__handle {
+  max-width: 100%;
+  overflow-wrap: anywhere;
+}
+
 .contact-card strong {
   font-size: 18px;
 }

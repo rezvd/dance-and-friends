@@ -1,6 +1,7 @@
 import { useEffect, useState, type CSSProperties } from "react";
 
 import type { CtaButton } from "@/entities/project/model/cta";
+import { schoolContacts } from "@/entities/project/model/contacts";
 import { fetchCalendarEvents } from "@/entities/project/model/calendar";
 import {
   buildCalendarWeeks,
@@ -27,9 +28,6 @@ const eventDateFormatter = new Intl.DateTimeFormat("ru-RU", {
   month: "long",
   timeZone: "UTC",
 });
-const vkGroupUrl =
-  import.meta.env.VITE_VK_GROUP_URL ?? "https://vk.com/club238903782";
-
 export function HomePage() {
   const [events, setEvents] = useState<ScheduleEvent[]>([]);
   const [selectedType, setSelectedType] = useState<EventType | "all">("all");
@@ -441,7 +439,7 @@ export function HomePage() {
           <div className="contact-card contact-card--socials">
             <a
               className="contact-card__social-link contact-card__social-link--vk"
-              href={vkGroupUrl}
+              href={schoolContacts.vkUrl}
               target="_blank"
               rel="noreferrer"
             >
@@ -452,7 +450,7 @@ export function HomePage() {
             </a>
             <a
               className="contact-card__social-link contact-card__social-link--telegram"
-              href="https://t.me/+v4A3_i0WPWJjMGJi"
+              href={schoolContacts.telegramUrl}
               target="_blank"
               rel="noreferrer"
             >
@@ -461,12 +459,14 @@ export function HomePage() {
               </span>
               <strong>Канал в ТГ</strong>
             </a>
+            <span className="contact-card__social-link contact-card__handle">
+              <strong>{schoolContacts.socialHandle}</strong>
+            </span>
           </div>
           <div className="contact-card contact-card--person">
             <span>
-              <strong>Софья Билль</strong>
-              <a href="tel:+79136143226">+7 913 614-32-26</a>
-              <a href="mailto:bill_03@mail.ru">bill_03@mail.ru</a>
+              <strong>Телефон студии</strong>
+              <a href={schoolContacts.phoneUrl}>{schoolContacts.phoneLabel}</a>
             </span>
           </div>
         </div>

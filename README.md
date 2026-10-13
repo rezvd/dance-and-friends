@@ -26,7 +26,6 @@ VITE_GOOGLE_CALENDAR_ID=calendar-id@group.calendar.google.com
 VITE_GOOGLE_CALENDAR_API_KEY=
 VITE_GOOGLE_SHEETS_SPREADSHEET_ID=1uQNCTFndlecN_nbwzXtEtXf6cqjvc4u_e6ACBi-w5iQ
 VITE_GOOGLE_SHEETS_API_KEY=AIzaSyAmT5GvCf-d7MTNl3S0d_zw2tx0QKY2Lbw
-VITE_VK_GROUP_URL=https://vk.com/club238903782
 ```
 
 Use Node 22 or newer. In this environment:
@@ -48,6 +47,32 @@ src/
 ```
 
 Imports use the `@/*` alias, configured in `vite.config.ts` and `tsconfig.app.json`.
+
+## Images from VK articles
+
+`npm run build` automatically downloads the pictures inside these articles before
+building the site:
+
+- [Schedule](https://vk.ru/@danceandfriendsomsk-raspisanie) → `src/assets/images/schedule.jpg`
+- [Prices](https://vk.ru/@danceandfriendsomsk-stoimost) → `src/assets/images/price.jpg`
+
+The sync reads the article's `Article.image` structured data, rather than the
+Open Graph cover. Images are saved locally and served as ordinary static assets;
+the site does not need a server or browser requests to VK. If an article or image
+cannot be downloaded, the last saved image is retained and the build continues.
+
+For the schedule, the sync also saves the text before the first picture to
+`src/entities/project/model/schedule-intro.json`. It preserves paragraphs, lists,
+bold/italic text and links, excluding the article title and author. Only supported
+text markup and safe link protocols are retained. The page displays this saved
+text above the schedule image. A failed text sync retains the previous version
+and does not prevent image updates; an empty intro removes the text block.
+
+After changing the text or a picture in VK, rebuild and deploy the site to publish the
+update. To refresh the images for local development, run `npm run sync:vk-images`
+before `npm run dev`. This command overwrites the two image files and schedule intro.
+Keep the saved images and intro in the repository so builds without VK access have a
+fallback.
 
 ## CTA sheet
 
