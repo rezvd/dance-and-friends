@@ -29,6 +29,10 @@ Page metadata lives in `src/shared/config/seo.ts`. `public/robots.txt` and
 `public/sitemap.xml` are copied into the build as real files. Calendar events and
 CTA continue to load in the browser from their existing Google sources.
 
+Internal canonical URLs end with `/` (for example `/teachers/`), matching
+Timeweb's directory URLs. Navigation, Open Graph URLs and the sitemap use the
+same addresses. `check:seo` also rejects links to known pages without the slash.
+
 On Timeweb App Platform, set the build command to `npm run build` and the output
 directory to `dist`. Domains, HTTPS and redirects are managed in the Timeweb
 panel. The project does not install or configure the platform's Caddy server.

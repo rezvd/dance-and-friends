@@ -174,7 +174,7 @@ export function HomePage() {
         <section className="about-more" aria-labelledby="about-more-title">
           <h2 id="about-more-title">Направления и преподаватели</h2>
           <nav className="about-links" aria-label="Подробнее о Dance&Friends">
-            <a className="about-link about-link--directions" href="/directions">
+            <a className="about-link about-link--directions" href="/directions/">
               <span className="about-link__copy">
                 <strong>Направления</strong>
                 <span>
@@ -186,7 +186,7 @@ export function HomePage() {
                 &gt;
               </span>
             </a>
-            <a className="about-link about-link--teachers" href="/teachers">
+            <a className="about-link about-link--teachers" href="/teachers/">
               <span className="about-link__copy">
                 <strong>Преподаватели</strong>
                 <span>

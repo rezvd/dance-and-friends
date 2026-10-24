@@ -91,35 +91,35 @@ export function AppHeader({ pathname }: { pathname: string }) {
         >
           <a href="/" onClick={closeMenu}>О нас</a>
           <a
-            href="/directions"
+            href="/directions/"
             aria-current={isDirectionsPage ? 'page' : undefined}
             onClick={closeMenu}
           >
             Направления
           </a>
           <a
-            href="/teachers"
+            href="/teachers/"
             aria-current={isTeachersPage ? 'page' : undefined}
             onClick={closeMenu}
           >
             Преподаватели
           </a>
           <a
-            href="/price"
+            href="/price/"
             aria-current={isPricePage ? 'page' : undefined}
             onClick={closeMenu}
           >
             Стоимость
           </a>
           <a
-            href="/schedule"
+            href="/schedule/"
             aria-current={isSchedulePage ? 'page' : undefined}
             onClick={closeMenu}
           >
             Расписание
           </a>
           <a
-            href="/contacts"
+            href="/contacts/"
             aria-current={isContactsPage ? 'page' : undefined}
             onClick={closeMenu}
           >

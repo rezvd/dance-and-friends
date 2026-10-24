@@ -6,11 +6,11 @@ import { parse } from 'parse5'
 const origin = 'https://dance-and-friends-omsk.ru'
 const pages = [
   ['/', 'Dance and Friends Omsk — социальные танцы в Омске', 'Dance&Friends', 'Начать легко'],
-  ['/directions', 'Направления танцев — Dance&Friends Омск', 'Наши направления', 'Линди-хоп'],
-  ['/teachers', 'Преподаватели — Dance&Friends Омск', 'Наши преподаватели', 'Вадим Рябенко'],
-  ['/price', 'Стоимость занятий — Dance&Friends Омск', 'Стоимость и оплата', 'Система абонементов'],
-  ['/schedule', 'Расписание занятий — Dance&Friends Омск', 'Расписание', 'Наши преподаватели'],
-  ['/contacts', 'Контакты Dance&Friends — социальные танцы в Омске', 'Контакты', 'г. Омск, ул. Гагарина, 8/2, 4 этаж'],
+  ['/directions/', 'Направления танцев — Dance&Friends Омск', 'Наши направления', 'Линди-хоп'],
+  ['/teachers/', 'Преподаватели — Dance&Friends Омск', 'Наши преподаватели', 'Вадим Рябенко'],
+  ['/price/', 'Стоимость занятий — Dance&Friends Омск', 'Стоимость и оплата', 'Система абонементов'],
+  ['/schedule/', 'Расписание занятий — Dance&Friends Омск', 'Расписание', 'Наши преподаватели'],
+  ['/contacts/', 'Контакты Dance&Friends — социальные танцы в Омске', 'Контакты', 'г. Омск, ул. Гагарина, 8/2, 4 этаж'],
 ]
 
 function findAll(node, predicate) {
@@ -37,6 +37,8 @@ function exactlyOne(node, predicate, label) {
 
 const titles = new Set()
 const descriptions = new Set()
+const canonicalPaths = new Set(pages.map(([path]) => path))
+const knownPaths = new Set(pages.map(([path]) => path.replace(/\/+$/, '') || '/'))
 
 for (const [path, expectedTitle, expectedH1, expectedContent] of pages) {
   const html = await readFile(resolve('dist', `.${path}`, 'index.html'), 'utf8')
@@ -78,6 +80,13 @@ for (const [path, expectedTitle, expectedH1, expectedContent] of pages) {
   assert.ok(robotsTags.every((node) => !/noindex|none/i.test(attribute(node, 'content') ?? '')))
 
   for (const node of findAll(document, (item) => Boolean(item.tagName))) {
+    if (node.tagName === 'a' && attribute(node, 'href')) {
+      const target = new URL(attribute(node, 'href'), origin)
+      const normalizedPath = target.pathname.replace(/\/+$/, '') || '/'
+      if (target.origin === origin && knownPaths.has(normalizedPath)) {
+        assert.ok(canonicalPaths.has(target.pathname), `${path}: non-canonical internal link ${target.href}`)
+      }
+    }
     for (const name of ['src', 'href']) {
       const value = attribute(node, name)
       if (value?.startsWith('/assets/')) await access(resolve('dist', `.${value}`))

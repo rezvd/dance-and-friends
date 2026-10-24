@@ -19,11 +19,11 @@ export function AppFooter() {
 
         <nav className="app-footer__nav" aria-label="Навигация в подвале">
           <a href="/">О нас</a>
-          <a href="/directions">Направления</a>
-          <a href="/teachers">Преподаватели</a>
-          <a href="/price">Стоимость</a>
-          <a href="/schedule">Расписание</a>
-          <a href="/contacts">Контакты</a>
+          <a href="/directions/">Направления</a>
+          <a href="/teachers/">Преподаватели</a>
+          <a href="/price/">Стоимость</a>
+          <a href="/schedule/">Расписание</a>
+          <a href="/contacts/">Контакты</a>
         </nav>
 
         <div className="app-footer__socials">

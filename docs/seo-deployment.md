@@ -14,11 +14,17 @@
 | URL | Файл |
 | --- | --- |
 | `/` | `dist/index.html` |
-| `/directions` | `dist/directions/index.html` |
-| `/teachers` | `dist/teachers/index.html` |
-| `/price` | `dist/price/index.html` |
-| `/schedule` | `dist/schedule/index.html` |
-| `/contacts` | `dist/contacts/index.html` |
+| `/directions/` | `dist/directions/index.html` |
+| `/teachers/` | `dist/teachers/index.html` |
+| `/price/` | `dist/price/index.html` |
+| `/schedule/` | `dist/schedule/index.html` |
+| `/contacts/` | `dist/contacts/index.html` |
+
+Канонические адреса внутренних страниц заканчиваются на `/`. Это соответствует
+выдаче каталогов в Timeweb App Platform: `/teachers` перенаправляется на
+`/teachers/`, а конечный адрес возвращает `200`. Canonical, Open Graph, sitemap
+и внутренние ссылки используют адреса со слешем, чтобы при переходах по сайту
+не возникало лишних редиректов.
 
 В каждом HTML уже есть H1, текст страницы, уникальные title и description,
 canonical и Open Graph. Главная содержит Organization в JSON-LD. Для logo
@@ -105,7 +111,7 @@ SPA fallback, потребуется настройка платформы ил�
 ```bash
 curl -I https://dance-and-friends-omsk.ru/robots.txt
 curl -I https://dance-and-friends-omsk.ru/sitemap.xml
-curl -I https://dance-and-friends-omsk.ru/teachers
+curl -I https://dance-and-friends-omsk.ru/teachers/
 ```
 
 Ожидается `200` и соответственно `text/plain`, `application/xml`, `text/html`.
@@ -113,17 +119,29 @@ robots.txt должен содержать разрешение обхода и 
 XML с шестью каноническими URL. В ответах не должно быть `X-Robots-Tag: noindex`.
 В конфигурации проекта такой заголовок и метатеги noindex не задаются.
 
+Проверьте нормализацию старого адреса без слеша:
+
+```bash
+curl -I 'https://dance-and-friends-omsk.ru/teachers?utm_source=check'
+curl -I 'https://dance-and-friends-omsk.ru/teachers/?utm_source=check'
+```
+
+Первый запрос должен вернуть постоянный редирект на
+`/teachers/?utm_source=check`, второй — `200` без заголовка Location.
+В HTML canonical должен указывать `https://dance-and-friends-omsk.ru/teachers/`
+без параметров запроса. Каждый адрес sitemap должен сразу возвращать `200`.
+
 Проверьте редиректы **без** отключения проверки сертификата:
 
 ```bash
-curl -I 'https://www.dance-and-friends-omsk.ru/teachers?utm_source=check'
-curl -I 'http://www.dance-and-friends-omsk.ru/teachers?utm_source=check'
-curl -I 'http://dance-and-friends-omsk.ru/teachers?utm_source=check'
-curl -sSL -o /dev/null -w '%{http_code} redirects=%{num_redirects} final=%{url_effective}\n' 'https://www.dance-and-friends-omsk.ru/teachers?utm_source=check'
+curl -I 'https://www.dance-and-friends-omsk.ru/teachers/?utm_source=check'
+curl -I 'http://www.dance-and-friends-omsk.ru/teachers/?utm_source=check'
+curl -I 'http://dance-and-friends-omsk.ru/teachers/?utm_source=check'
+curl -sSL -o /dev/null -w '%{http_code} redirects=%{num_redirects} final=%{url_effective}\n' 'https://www.dance-and-friends-omsk.ru/teachers/?utm_source=check'
 ```
 
 Каждый исходный URL должен вернуть постоянный редирект (`301` или `308`) на
-`https://dance-and-friends-omsk.ru/teachers?utm_source=check`.
+`https://dance-and-friends-omsk.ru/teachers/?utm_source=check`.
 Для редиректа www в панели выбран `308`. Последняя команда должна показать
 `200`, `redirects=1` и канонический адрес с сохранёнными путём и query string.
 HTTP → HTTPS также проверяется публичным запросом: локальный Caddyfile не может
