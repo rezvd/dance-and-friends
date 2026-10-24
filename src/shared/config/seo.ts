@@ -37,7 +37,14 @@ export const organization = {
   '@context': 'https://schema.org',
   '@type': 'Organization',
   name: 'Dance&Friends',
-  alternateName: 'Dance and Friends Omsk',
+  alternateName: [
+    'Dance and Friends Omsk',
+    'Dance and Friends',
+    'Dance&Friends Omsk',
+    'Dance&Friends Омск',
+    'Дэнс энд Френдс',
+    'Дэнс энд Френдс Омск',
+  ],
   url: `${siteOrigin}/`,
   // Existing public site icon
   logo: `${siteOrigin}/android-chrome-512x512.png`,

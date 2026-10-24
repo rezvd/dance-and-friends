@@ -102,7 +102,14 @@ for (const [path, expectedTitle, expectedH1, expectedContent] of pages) {
     assert.equal(organization['@context'], 'https://schema.org')
     assert.equal(organization['@type'], 'Organization')
     assert.equal(organization.name, 'Dance&Friends')
-    assert.equal(organization.alternateName, 'Dance and Friends Omsk')
+    assert.deepEqual(organization.alternateName, [
+      'Dance and Friends Omsk',
+      'Dance and Friends',
+      'Dance&Friends Omsk',
+      'Dance&Friends Омск',
+      'Дэнс энд Френдс',
+      'Дэнс энд Френдс Омск',
+    ])
     assert.equal(organization.url, `${origin}/`)
     assert.equal(organization.telephone, '+7 950 797-00-50')
     assert.equal(organization.address['@type'], 'PostalAddress')
