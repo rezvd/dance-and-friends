@@ -8,11 +8,11 @@ import { SchedulePage } from '@/pages/schedule'
 import { TeachersPage } from '@/pages/teachers'
 import { AppShell } from '@/widgets/app-shell'
 
-export function App() {
-  const pathname = window.location.pathname.replace(/\/+$/, '') || '/'
-  const hash = window.location.hash
+export function App({ pathname: requestedPath }: { pathname: string }) {
+  const pathname = requestedPath.replace(/\/+$/, '') || '/'
 
   useEffect(() => {
+    const hash = window.location.hash
     if (!hash) {
       return
     }
@@ -26,7 +26,7 @@ export function App() {
     })
 
     return () => window.cancelAnimationFrame(frame)
-  }, [hash, pathname])
+  }, [pathname])
 
   const page =
     pathname === '/directions' ? (
@@ -44,7 +44,7 @@ export function App() {
     )
 
   return (
-    <AppShell>
+    <AppShell pathname={pathname}>
       {page}
     </AppShell>
   )

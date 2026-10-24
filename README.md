@@ -19,6 +19,24 @@ npm run lint
 npm run typecheck
 ```
 
+## Static HTML and SEO deployment
+
+`npm run build` renders all six public routes to HTML in `dist/` and runs
+`npm run check:seo`. The browser hydrates the existing HTML; no Node server is
+needed in production. `dist-ssr/` is a build-time intermediate and is not deployed.
+
+Page metadata lives in `src/shared/config/seo.ts`. `public/robots.txt` and
+`public/sitemap.xml` are copied into the build as real files. Calendar events and
+CTA continue to load in the browser from their existing Google sources.
+
+On Timeweb App Platform, set the build command to `npm run build` and the output
+directory to `dist`. Domains, HTTPS and redirects are managed in the Timeweb
+panel. The project does not install or configure the platform's Caddy server.
+`vercel.json` only redirects the old Vercel site.
+
+See [deployment and Search Console instructions](docs/seo-deployment.md) before
+publishing, including DNS requirements for the www certificate.
+
 ## Environment
 
 ```bash

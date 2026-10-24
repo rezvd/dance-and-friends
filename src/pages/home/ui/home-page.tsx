@@ -115,11 +115,11 @@ export function HomePage() {
           <h1
             id="hero-title"
             className="hero__logo"
-            aria-label="Dance and Friends"
+            aria-label="Dance&Friends"
           >
-            <span>DANCE</span>
+            <span>Dance</span>
             <span className="hero__logo-ampersand">&amp;</span>
-            <span>FRIENDS</span>
+            <span>Friends</span>
           </h1>
           <p className="hero__lead">
             Линди хоп, блюз и бальбоа для тех, кто хочет чаще танцевать,
@@ -146,6 +146,7 @@ export function HomePage() {
               ,<br />а не шагов
             </span>
           </h2>
+          <p>Dance and Friends Omsk — сообщество социальных танцев в Омске</p>
         </div>
         <div className="about__grid">
           <article className="about-card">

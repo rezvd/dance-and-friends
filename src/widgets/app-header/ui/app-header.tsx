@@ -5,11 +5,10 @@ import menuIcon from '@/assets/icons/menu.svg'
 
 import './app-header.css'
 
-export function AppHeader() {
+export function AppHeader({ pathname }: { pathname: string }) {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const headerRef = useRef<HTMLElement>(null)
   const menuButtonRef = useRef<HTMLButtonElement>(null)
-  const pathname = window.location.pathname.replace(/\/+$/, '') || '/'
   const isDirectionsPage = pathname === '/directions'
   const isTeachersPage = pathname === '/teachers'
   const isPricePage = pathname === '/price'

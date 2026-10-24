@@ -45,6 +45,7 @@
 }
 
 .hero__logo {
+  text-transform: uppercase;
   margin: 0;
   display: flex;
   flex-wrap: wrap;
