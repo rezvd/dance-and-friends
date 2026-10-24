@@ -63,7 +63,11 @@ export function PricePage() {
         <section className="payment" aria-labelledby="payment-title">
           <article className="payment__details">
             <h2 id="payment-title">Оплата</h2>
-            <p>Оплата всегда осуществляется переводом на номер студии</p>
+            <p>
+              <strong>
+                Оплата всегда осуществляется СБП переводом в Т-банк по номеру студии
+              </strong>
+            </p>
             <a className="payment__phone" href="tel:+79507970050">
               +7 950 797-00-50
             </a>

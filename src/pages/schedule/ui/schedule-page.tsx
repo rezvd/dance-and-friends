@@ -1,6 +1,6 @@
-import scheduleImage from '@/assets/images/schedule.jpg'
 import scheduleIntro from '@/entities/project/model/schedule-intro.json'
 import { CtaSection } from '@/widgets/cta-list'
+import { EventCalendar } from '@/widgets/event-calendar'
 
 import './schedule-page.css'
 
@@ -21,55 +21,7 @@ export function SchedulePage() {
           />
         )}
 
-        <figure className="schedule-page__image">
-          <img
-            src={scheduleImage}
-            alt="Расписание занятий Dance&Friends"
-          />
-        </figure>
-
-        <section className="schedule-teachers" aria-labelledby="schedule-teachers-title">
-          <h2 id="schedule-teachers-title">Наши преподаватели</h2>
-          <div className="schedule-teachers__grid">
-            <article className="schedule-teacher-card schedule-teacher-card--lindy">
-              <h3>Линди-хоп</h3>
-              <dl>
-                <div>
-                  <dt>Начинающие</dt>
-                  <dd>Вадим Рябенко и Софья Билль</dd>
-                </div>
-                <div>
-                  <dt>Продолжающие</dt>
-                  <dd>Алексей Маловечкин</dd>
-                </div>
-              </dl>
-            </article>
-
-            <article className="schedule-teacher-card schedule-teacher-card--blues">
-              <h3>Блюз</h3>
-              <dl>
-                <div>
-                  <dt>Начинающие</dt>
-                  <dd>Софья Билль и Илья Пониванов</dd>
-                </div>
-                <div>
-                  <dt>Продолжающие, интенсив</dt>
-                  <dd>Юлия Никифорова</dd>
-                </div>
-              </dl>
-            </article>
-
-            <article className="schedule-teacher-card schedule-teacher-card--balboa">
-              <h3>Бальбоа</h3>
-              <dl>
-                <div>
-                  <dt>Все группы</dt>
-                  <dd>Алексей Маловечкин</dd>
-                </div>
-              </dl>
-            </article>
-          </div>
-        </section>
+        <EventCalendar />
 
         <CtaSection className="schedule-page__cta" />
       </main>

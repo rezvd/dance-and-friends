@@ -69,6 +69,49 @@ export function TeachersPage() {
         ))}
       </section>
 
+      <section className="teacher-groups" aria-labelledby="teacher-groups-title">
+        <h2 id="teacher-groups-title">Кто ведёт занятия</h2>
+        <div className="teacher-groups__grid">
+          <article className="teacher-group-card teacher-group-card--lindy">
+            <h3>Линди-хоп</h3>
+            <dl>
+              <div>
+                <dt>Начинающие</dt>
+                <dd>Вадим Рябенко и Софья Билль</dd>
+              </div>
+              <div>
+                <dt>Продолжающие</dt>
+                <dd>Алексей Маловечкин</dd>
+              </div>
+            </dl>
+          </article>
+
+          <article className="teacher-group-card teacher-group-card--blues">
+            <h3>Блюз</h3>
+            <dl>
+              <div>
+                <dt>Начинающие</dt>
+                <dd>Софья Билль и Илья Пониванов</dd>
+              </div>
+              <div>
+                <dt>Продолжающие, интенсив</dt>
+                <dd>Юлия Никифорова</dd>
+              </div>
+            </dl>
+          </article>
+
+          <article className="teacher-group-card teacher-group-card--balboa">
+            <h3>Бальбоа</h3>
+            <dl>
+              <div>
+                <dt>Все группы</dt>
+                <dd>Алексей Маловечкин</dd>
+              </div>
+            </dl>
+          </article>
+        </div>
+      </section>
+
       <CtaSection />
     </div>
   );
