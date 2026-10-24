@@ -13,10 +13,11 @@ export function AppHeader({ pathname }: { pathname: string }) {
   const isTeachersPage = pathname === '/teachers'
   const isPricePage = pathname === '/price'
   const isSchedulePage = pathname === '/schedule'
+  const isFaqPage = pathname === '/faq'
   const isContactsPage = pathname === '/contacts'
 
   useEffect(() => {
-    const desktopMedia = window.matchMedia('(min-width: 761px)')
+    const desktopMedia = window.matchMedia('(min-width: 1121px)')
     const handleDesktopChange = (event: MediaQueryListEvent) => {
       if (event.matches) {
         setIsMenuOpen(false)
@@ -117,6 +118,13 @@ export function AppHeader({ pathname }: { pathname: string }) {
             onClick={closeMenu}
           >
             Расписание
+          </a>
+          <a
+            href="/faq/"
+            aria-current={isFaqPage ? 'page' : undefined}
+            onClick={closeMenu}
+          >
+            Частые вопросы
           </a>
           <a
             href="/contacts/"

@@ -41,7 +41,7 @@
 
 .app-header__nav {
   display: flex;
-  gap: 18px;
+  gap: 24px;
   margin-left: auto;
   color: var(--text);
   font-size: 14px;
@@ -60,10 +60,16 @@
   color: var(--accent-strong);
 }
 
-@media (max-width: 760px) {
+@media (min-width: 1121px) {
+  .app-header__nav a {
+    white-space: nowrap;
+  }
+}
+
+@media (max-width: 1120px) {
   .app-header__inner {
     min-height: 64px;
-    padding: 10px 16px;
+    padding: 10px 24px;
     justify-content: space-between;
     gap: 16px;
   }
@@ -100,8 +106,8 @@
   .app-header__nav {
     position: absolute;
     top: 100%;
-    right: 16px;
-    left: 16px;
+    right: 24px;
+    left: 24px;
     width: auto;
     margin: 0;
     padding: 10px 16px 14px;
@@ -124,5 +130,17 @@
 
   .app-header__nav a {
     padding: 10px 0;
+  }
+}
+
+@media (max-width: 760px) {
+  .app-header__inner {
+    padding-right: 16px;
+    padding-left: 16px;
+  }
+
+  .app-header__nav {
+    right: 16px;
+    left: 16px;
   }
 }

@@ -2,6 +2,7 @@ import { useEffect } from 'react'
 
 import { ContactsPage } from '@/pages/contacts'
 import { DirectionsPage } from '@/pages/directions'
+import { FaqPage } from '@/pages/faq'
 import { HomePage } from '@/pages/home'
 import { PricePage } from '@/pages/price'
 import { SchedulePage } from '@/pages/schedule'
@@ -37,6 +38,8 @@ export function App({ pathname: requestedPath }: { pathname: string }) {
       <PricePage />
     ) : pathname === '/schedule' ? (
       <SchedulePage />
+    ) : pathname === '/faq' ? (
+      <FaqPage />
     ) : pathname === '/contacts' ? (
       <ContactsPage />
     ) : (

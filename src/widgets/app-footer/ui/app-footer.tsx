@@ -23,6 +23,7 @@ export function AppFooter() {
           <a href="/teachers/">Преподаватели</a>
           <a href="/price/">Стоимость</a>
           <a href="/schedule/">Расписание</a>
+          <a href="/faq/">Частые вопросы</a>
           <a href="/contacts/">Контакты</a>
         </nav>
 

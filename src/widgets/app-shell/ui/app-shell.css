@@ -12,7 +12,7 @@
   flex: 1;
 }
 
-@media (max-width: 760px) {
+@media (max-width: 1120px) {
   .app-shell {
     padding-top: 65px;
   }
