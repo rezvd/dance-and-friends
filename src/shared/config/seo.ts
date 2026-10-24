@@ -60,3 +60,11 @@ export const organization = {
     'https://t.me/danceandfriendsomsk',
   ],
 }
+
+export const website = {
+  '@context': 'https://schema.org',
+  '@type': 'WebSite',
+  name: organization.name,
+  alternateName: organization.alternateName,
+  url: organization.url,
+}

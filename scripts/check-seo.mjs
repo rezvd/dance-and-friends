@@ -97,8 +97,12 @@ for (const [path, expectedTitle, expectedH1, expectedContent] of pages) {
     node.tagName === 'script' && attribute(node, 'type') === 'application/ld+json')
   if (path === '/') {
     assert.ok(content.includes('Dance and Friends Omsk — сообщество социальных танцев в Омске'))
-    assert.equal(jsonLd.length, 1)
-    const organization = JSON.parse(text(jsonLd[0]))
+    assert.equal(jsonLd.length, 2)
+    const schemas = jsonLd.map((node) => JSON.parse(text(node)))
+    const organization = schemas.find((entity) => entity['@type'] === 'Organization')
+    const website = schemas.find((entity) => entity['@type'] === 'WebSite')
+    assert.ok(organization, 'Organization is absent from home HTML')
+    assert.ok(website, 'WebSite is absent from home HTML')
     assert.equal(organization['@context'], 'https://schema.org')
     assert.equal(organization['@type'], 'Organization')
     assert.equal(organization.name, 'Dance&Friends')
@@ -118,6 +122,10 @@ for (const [path, expectedTitle, expectedH1, expectedContent] of pages) {
     assert.deepEqual(organization.sameAs, ['https://vk.ru/danceandfriendsomsk', 'https://t.me/danceandfriendsomsk'])
     assert.ok(organization.logo.startsWith(`${origin}/`))
     await access(resolve('dist', `.${new URL(organization.logo).pathname}`))
+    assert.equal(website['@context'], 'https://schema.org')
+    assert.equal(website.name, 'Dance&Friends')
+    assert.equal(website.url, `${origin}/`)
+    assert.deepEqual(website.alternateName, organization.alternateName)
   } else {
     assert.equal(jsonLd.length, 0)
   }
@@ -137,4 +145,4 @@ assert.ok(sitemap.includes('xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"'
 assert.deepEqual([...sitemap.matchAll(/<loc>(.*?)<\/loc>/g)].map((match) => match[1]),
   pages.map(([path]) => `${origin}${path}`))
 assert.ok(!sitemap.includes('<lastmod>'), 'Do not invent page modification dates')
-console.log('[SEO] Unique metadata, Organization JSON-LD, robots.txt and sitemap.xml OK')
+console.log('[SEO] Unique metadata, Organization and WebSite JSON-LD, robots.txt and sitemap.xml OK')

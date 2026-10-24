@@ -27,7 +27,9 @@
 не возникало лишних редиректов.
 
 В каждом HTML уже есть H1, текст страницы, уникальные title и description,
-canonical и Open Graph. Главная содержит Organization в JSON-LD. Для logo
+canonical и Open Graph. Главная содержит отдельные блоки Organization и WebSite
+в JSON-LD с общими name, alternateName и url. WebSite задаёт предпочтительное
+название сайта `Dance&Friends` и альтернативные названия. Для logo в Organization
 используется существующая публичная иконка сайта `android-chrome-512x512.png`,
 для og:image — существующее изображение `cover.png` с именем из сборки Vite.
 Оба URL абсолютные и ведут на основной домен.
@@ -149,7 +151,7 @@ HTTP → HTTPS также проверяется публичным запрос
 
 Откройте исходный HTML всех шести страниц или загрузите его через curl.
 Проверьте title, description, canonical, H1, текст страницы и абсолютные OG URL.
-На главной проверьте Organization через
+На главной проверьте Organization и WebSite через
 [Schema.org Validator](https://validator.schema.org/), вставив HTML из `dist/index.html`
 или указав опубликованный адрес. Проверьте также страницы с отключённым JavaScript,
 мобильное меню, галереи видео и загрузку CTA и мероприятий.

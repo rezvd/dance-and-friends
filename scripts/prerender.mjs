@@ -1,7 +1,7 @@
 import { mkdir, readFile, writeFile } from 'node:fs/promises'
 import { dirname, resolve } from 'node:path'
 
-import { organization, render, seoPages, siteOrigin } from '../dist-ssr/entry-server.js'
+import { organization, render, seoPages, siteOrigin, website } from '../dist-ssr/entry-server.js'
 
 const outputDirectory = resolve('dist')
 const template = await readFile(resolve(outputDirectory, 'index.html'), 'utf8')
@@ -30,9 +30,9 @@ for (const page of seoPages) {
     '<meta property="og:type" content="website" />',
     `<meta property="og:url" content="${canonical}" />`,
     `<meta property="og:image" content="${new URL(image, siteOrigin).href}" />`,
-    ...(page.path === '/' ? [
-      `<script type="application/ld+json">${JSON.stringify(organization).replaceAll('<', '\\u003c')}</script>`,
-    ] : []),
+    ...(page.path === '/' ? [organization, website].map((entity) =>
+      `<script type="application/ld+json">${JSON.stringify(entity).replaceAll('<', '\\u003c')}</script>`,
+    ) : []),
   ]
   const html = template
     .replace(headMarker, () => tags.join('\n    '))

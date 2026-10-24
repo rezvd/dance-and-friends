@@ -29,6 +29,9 @@ Page metadata lives in `src/shared/config/seo.ts`. `public/robots.txt` and
 `public/sitemap.xml` are copied into the build as real files. Calendar events and
 CTA continue to load in the browser from their existing Google sources.
 
+The home page contains separate `Organization` and `WebSite` JSON-LD records
+with a shared name, alternate names and canonical home URL.
+
 Internal canonical URLs end with `/` (for example `/teachers/`), matching
 Timeweb's directory URLs. Navigation, Open Graph URLs and the sitemap use the
 same addresses. `check:seo` also rejects links to known pages without the slash.
