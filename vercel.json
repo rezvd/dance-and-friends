@@ -1,8 +1,20 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
+  "redirects": [
+    {
+      "source": "/",
+      "destination": "https://dance-and-friends-omsk.ru/",
+      "permanent": true
+    },
+    {
+      "source": "/:path((?!assets/).+)",
+      "destination": "https://dance-and-friends-omsk.ru/:path*",
+      "permanent": true
+    }
+  ],
   "rewrites": [
     {
-      "source": "/(.*)",
+      "source": "/:path((?!assets/).*)",
       "destination": "/index.html"
     }
   ]
